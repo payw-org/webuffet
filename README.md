@@ -1,5 +1,22 @@
 # WEBuffet
 
-WEBuffet로 어떤 웹사이트던지 내 입맛에 맞게 조작하세요.
+## Introduction
+WEBuffet allows clients to manipulate any website as your tastes by deleting, moving or transforming any components within the page.
 
-광고 등의 원하지 않는 요소를 삭제하거나, 원하는 위치로 옮기거나, 색깔이나 크기를 변경할 수 있습니다.
+## Build instructions
+You must install **Node.js** and **NPM** before following the instructions below.
+
+1. Go to `src` directory
+```bash
+cd path/to/src/
+```
+
+2. Install packages
+```bash
+npm install
+```
+
+3. Build
+```bash
+npm run build
+```
