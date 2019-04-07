@@ -1,22 +1,30 @@
 {
   "name": "webuffet",
   "version": "1.0.0",
-  "description": "Customize any website on client side.",
-  "main": "index.js",
+  "description": "Manipulate any website to your tastes.",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/webuffet/webuffet.git"
+    "build": "npx webpack --config webpack.config.js",
+    "build:watch": "npx webpack --watch --config webpack.config.js"
   },
   "author": "WEBuffet",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/webuffet/webuffet/issues"
-  },
-  "homepage": "https://github.com/webuffet/webuffet#readme",
   "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@types/node": "^11.13.0",
+    "autoprefixer": "^9.5.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.1",
+    "html-loader": "^0.5.5",
+    "node-sass": "^4.11.0",
+    "postcss-cli": "^6.1.2",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "svg-url-loader": "^2.3.2",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.1",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   }
