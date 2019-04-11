@@ -22,7 +22,7 @@ export default class Ruler {
     }
   }
 
-  static getCurrentRotation(elm: HTMLElement) {
+  static getRotationValue(elm: HTMLElement) {
     let st = window.getComputedStyle(elm), angle
     let matrix = st.getPropertyValue("-webkit-transform") ||
     st.getPropertyValue("-moz-transform")    ||
