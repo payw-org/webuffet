@@ -4,6 +4,8 @@ export default class WBStorage {
   private currentURL: string
   private selectedElm: HTMLElement
   private originalState: {
+    width: number
+    height: number
     left: number
     top: number
     scale: number
