@@ -20,3 +20,19 @@ npm install
 ```bash
 npm run build
 ```
+
+## Installation for builders (optional)
+
+1. Open Chrome "Settings" -> "Extensions"
+![Getting started](./img1.png)
+
+
+2. Activate "Developer mode" and Click "Load unpacked"
+![Getting started](./img2.png)
+
+3. Choose `path/extension` folder and click select
+![Getting started](./img3.png)
+
+4. Go any website and click anywhere for 1 second. Then you can activate webuffet.
+![Getting started](./img4.png)
+![Getting started](./img5.png)
