@@ -10,6 +10,7 @@ export default class WBStorage {
     top: number
     scale: number
     rotate: number
+    distanceFromOrigin: number
   }
   private finalState: {
     left: number

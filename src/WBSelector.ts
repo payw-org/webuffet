@@ -15,7 +15,7 @@ export default class WBSelector {
     // Event Listeners
     window.addEventListener('mouseover', e => {
       if (this.isStarted && e.target instanceof HTMLElement) {
-        this.setView()
+        this.setBoundingRectPos()
       }
     })
 
@@ -32,7 +32,7 @@ export default class WBSelector {
     })
   }
 
-  private setView() {
+  private setBoundingRectPos() {
     let selectedElm = this.wbStorage.getSelectedElement()
     let boundingRect = selectedElm.getBoundingClientRect()
     this.selectorElm.style.left = boundingRect.left + 'px'
