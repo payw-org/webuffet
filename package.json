@@ -2,6 +2,7 @@
   "name": "webuffet",
   "version": "1.0.0",
   "description": "Manipulate any website to your tastes.",
+  "repository": "https://github.com/CAU-OSS-2019/team-project-team9.git",
   "main": "main.js",
   "scripts": {
     "build": "npx webpack --config webpack.config.js",
@@ -26,6 +27,7 @@
     "ts-loader": "^5.3.3",
     "typescript": "^3.4.1",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^3.3.0",
+    "webpack-messages": "^2.0.4"
   }
 }
