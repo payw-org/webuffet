@@ -1,6 +1,12 @@
 import Ruler from './Ruler'
+import WBSession from './WBSession'
+import WBSelector from './WBSelector'
+import WBApexTool from './WBApexTool'
 
 export default class WEBuffet {
+  private readonly wbSession: WBSession
+  private readonly wbSelector: WBSelector
+  private readonly wbApexTool: WBApexTool
   longPressTimeout: number
   mouseMoveTimeout: number
   domSelected: boolean
@@ -15,7 +21,7 @@ export default class WEBuffet {
   }
   wbDom: HTMLElement
   wbComponents: HTMLElement
-  wbSelector: HTMLElement
+  wbSelectorDom: HTMLElement
   wbProgressBar: HTMLElement
   wbEditingBoundary: HTMLElement
   isWebuffetActive: boolean = false
@@ -38,23 +44,34 @@ export default class WEBuffet {
 
   constructor() {
     require('./scss/webuffet.scss')
+
     this.domSelected = false
     this.wbDom = undefined
     this.selectedTarget = undefined
 
+    // Inject WEBuffet components into document
     let componentHTML = require('./templates/webuffet.html')
     this.wbComponents = new DOMParser().parseFromString(componentHTML, 'text/html').querySelector('#webuffet-components')
     document.body.insertBefore(this.wbComponents, document.body.firstChild)
-    this.wbSelector = this.wbComponents.querySelector('#wbc-selector')
-    this.wbProgressBar = this.wbComponents.querySelector('#wbc-progress-bar')
-    this.wbProgressBar.addEventListener('transitionend', e => {
-      this.endSelectingMode()
-      this.startEditingMode()
-    })
+
+    // this.wbSelectorDom = this.wbComponents.querySelector('#wbc-selector')
+    // this.wbProgressBar = this.wbComponents.querySelector('#wbc-progress-bar')
+    // this.wbProgressBar.addEventListener('transitionend', e => {
+    //   this.endSelectingMode()
+    //   this.startEditingMode()
+    // })
 
     this.wbEditingBoundary = this.wbComponents.querySelector('#wbc-editing-boundary')
 
-    this.addListeners()
+    // this.addListeners()
+
+
+    this.wbSession = new WBSession()
+    this.wbSelector = new WBSelector(this.wbComponents.querySelector('#wbc-selector'), this.wbSession)
+    this.wbApexTool = new WBApexTool(this.wbComponents.querySelector('#wbc-editing-boundary'), this.wbSession)
+    this.wbSelector.whenScanningCompleted(() => {
+      this.wbApexTool.start()
+    })
   }
 
   setRectPos(
@@ -78,7 +95,7 @@ export default class WEBuffet {
   adjustToolPosition() {
     if (!this.selectedTarget) return
 
-    this.setRectPos(this.wbSelector,
+    this.setRectPos(this.wbSelectorDom,
       this.selectedTarget.getBoundingClientRect().top,
       this.selectedTarget.getBoundingClientRect().left,
       this.selectedTarget.getBoundingClientRect().width,
@@ -95,7 +112,7 @@ export default class WEBuffet {
     this.isSelectingMode = true
     this.isWebuffetActive = true
     document.body.classList.add('webuffet-active')
-    this.wbSelector.classList.remove('hidden')
+    this.wbSelectorDom.classList.remove('hidden')
 
     // Set iframes unclickable
     document.querySelectorAll('iframe').forEach(item => {
@@ -106,11 +123,11 @@ export default class WEBuffet {
   endSelectingMode(reset: boolean = false) {
     this.isSelectingMode = false
     this.isWebuffetActive = false
-    this.wbSelector.classList.add('hidden')
+    this.wbSelectorDom.classList.add('hidden')
     this.wbProgressBar.classList.remove('expand')
 
     if (reset) {
-      this.setRectPos(this.wbSelector, -100, -100, 0, 0)
+      this.setRectPos(this.wbSelectorDom, -100, -100, 0, 0)
     }
   }
 
@@ -153,7 +170,7 @@ export default class WEBuffet {
     if (this.isSelectingMode) {
       if (e.target instanceof HTMLElement) {
         this.selectedTarget = e.target
-        this.setRectPos(this.wbSelector,
+        this.setRectPos(this.wbSelectorDom,
           this.selectedTarget.getBoundingClientRect().top,
           this.selectedTarget.getBoundingClientRect().left,
           this.selectedTarget.getBoundingClientRect().width,
@@ -173,7 +190,7 @@ export default class WEBuffet {
           left: 0,
           top: 0,
           scale: Ruler.getScaleXY(this.selectedTarget).x,
-          rotate: Ruler.getCurrentRotation(this.selectedTarget)
+          rotate: Ruler.getRotationValue(this.selectedTarget)
         }
         if (this.selectedTarget.style.left) {
           this.defaultTransVal.left = parseInt(this.selectedTarget.style.left)

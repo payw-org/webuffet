@@ -2,6 +2,10 @@ export default class Ruler {
   constructor() {
   }
 
+  static getDistance(x1: number, y1: number, x2: number, y2: number) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+  }
+
   static getTranslateXY(elm: HTMLElement) {
     let style = window.getComputedStyle(elm)
     let matrix = new WebKitCSSMatrix(style.webkitTransform)
@@ -22,7 +26,7 @@ export default class Ruler {
     }
   }
 
-  static getCurrentRotation(elm: HTMLElement) {
+  static getRotationValue(elm: HTMLElement) {
     let st = window.getComputedStyle(elm), angle
     let matrix = st.getPropertyValue("-webkit-transform") ||
     st.getPropertyValue("-moz-transform")    ||
