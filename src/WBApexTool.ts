@@ -1,4 +1,5 @@
 import WBSession from "./WBSession"
+import Ruler from "./Ruler"
 
 // Todo
 // Preserve delete, resize, more buttons rotation
@@ -11,7 +12,16 @@ export default class WBApexTool {
   private moreBtn: HTMLElement
   private readonly wbSession: WBSession
 
-  private mode: undefined|'remove'|'rotate'|'scale' = undefined
+  private mode: undefined|'move'|'rotate'|'scale' = undefined
+  private mouseOrigin: {
+    x: number,
+    y: number
+  }
+
+  private initialDistance: number
+  private initialAngle: number
+  private lastFinalScale: number
+  private lastFinalRoate: number
 
   constructor(apexToolElm: HTMLElement, wbSession: WBSession) {
     this.apexToolElm = apexToolElm
@@ -24,22 +34,79 @@ export default class WBApexTool {
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
     // Add event listeners
+    this.removeBtn.addEventListener('click', e => {
+      console.log('remove')
+    })
+
     window.addEventListener('mousedown', e => {
+      this.mouseOrigin = {
+        x: e.pageX,
+        y: e.pageY
+      }
+
+      this.lastFinalRoate = this.wbSession.getFinalState().rotate
+      this.lastFinalScale = this.wbSession.getFinalState().scale
+
       if (e.target instanceof HTMLElement) {
-        if (e.target.closest('#wbc-editing-boundary .remove')) {
-          console.log('remove btn')
-        } else if (e.target.closest('#wbc-editing-boundary .rotate')) {
-          console.log('rotate btn')
+        if (e.target.closest('#wbc-editing-boundary .rotate')) {
+          // rotation
+          this.mode = 'rotate'
+
+          const rect = this.wbSession.getSelectedElement().getBoundingClientRect()
+          let R2D = 180 / Math.PI, center, x, y
+          center = {
+            x: rect.left + (rect.width / 2),
+            y: rect.top + (rect.height / 2)
+          }
+          x = e.pageX - center.x
+          y = e.pageY - center.y
+          this.initialAngle = R2D * Math.atan2(y, x)
         } else if (e.target.closest('#wbc-editing-boundary .scale')) {
-          console.log('scale btn')
+          // scaling
+          this.mode = 'scale'
+          this.initialDistance = Ruler.getDistance(e.pageX, e.pageY, this.wbSession.getFinalState().coordinate.x, this.wbSession.getFinalState().coordinate.y)
         } else if (e.target.closest('#wbc-editing-boundary')) {
-          console.log('move')
+          this.mode = 'move'
         }
       }
     })
 
+    window.addEventListener('mousemove', e => {
+      if (!this.mode) return
+
+      if (this.mode === 'scale') {
+        let distance = Ruler.getDistance(e.pageX, e.pageY, this.wbSession.getOriginalState().coordinate.x, this.wbSession.getOriginalState().coordinate.y)
+        let newScale = distance / this.initialDistance * this.lastFinalScale
+
+        this.wbSession.getSelectedElement().style.transform = 'rotate(' + this.lastFinalRoate + 'deg) scale(' + newScale + ')'
+
+        this.wbSession.setFinal({
+          scale: newScale
+        })
+      } else if (this.mode === 'rotate') {
+        const rect = this.wbSession.getSelectedElement().getBoundingClientRect()
+        let R2D = 180 / Math.PI, center, x, y, d
+        center = {
+          x: rect.left + (rect.width / 2),
+          y: rect.top + (rect.height / 2)
+        }
+        x = e.pageX - center.x
+        y = e.pageY - center.y
+        d = R2D * Math.atan2(y, x)
+        let newAngle = d - this.initialAngle + this.lastFinalRoate
+        this.wbSession.getSelectedElement().style.transform = 'rotate(' + newAngle + 'deg) scale(' + this.lastFinalScale + ')'
+
+        this.wbSession.setFinal({
+          rotate: newAngle
+        })
+      }
+      
+      this.setBoundingRectPos()
+    })
+
     window.addEventListener('mouseup', e => {
       this.mode = undefined
+      console.log(this.wbSession.getFinalState())
     })
   }
 
@@ -55,21 +122,16 @@ export default class WBApexTool {
   }
 
   private setBoundingRectPos() {
-    const originalState = this.wbSession.getOriginalState()
+    const selectedElm = this.wbSession.getSelectedElement()
+    const rect = selectedElm.getBoundingClientRect()
     const finalState = this.wbSession.getFinalState()
 
-    let scaledWidth = originalState.width * originalState.scale
-    let scaledHeight = originalState.height * originalState.scale
-    let deltaX = scaledWidth - originalState.width
-    let deltaY = scaledHeight - originalState.height
-
     // Set ApexTool's boundary position
-    this.apexToolElm.style.left = originalState.left - deltaX/2 + 'px'
-    this.apexToolElm.style.top = originalState.top - deltaY/2 + 'px'
-    this.apexToolElm.style.width = originalState.width * finalState.scale + 'px'
-    this.apexToolElm.style.height = originalState.height * finalState.scale + 'px'
-    this.apexToolElm.style.transform = 'rotate(' + finalState.rotate + 'deg)'
-    this.apexToolElm.style.webkitTransform = 'rotate(' + finalState.rotate + 'deg)'
+    this.apexToolElm.style.left = rect.left + (rect.width - selectedElm.clientWidth) / 2 - (selectedElm.clientWidth * finalState.scale - selectedElm.clientWidth) / 2 + 'px'
+    this.apexToolElm.style.top = rect.top + (rect.height - selectedElm.clientHeight) / 2 - (selectedElm.clientHeight * finalState.scale - selectedElm.clientHeight) / 2 + 'px'
+    this.apexToolElm.style.width = selectedElm.clientWidth * finalState.scale  + 'px'
+    this.apexToolElm.style.height = selectedElm.clientHeight * finalState.scale + 'px'
+    this.apexToolElm.style.transform = 'rotate(' + Ruler.getRotationValue(selectedElm) + 'deg)'
 
     // Preserve buttons' horizontality
     // by rotating to oposite degrees
