@@ -1,20 +1,19 @@
 import Ruler from "./Ruler"
 
 interface OriginalState {
-  width: number
-  height: number
-  left: number
-  top: number
-  scale: number
-  rotate: number
-  distanceFromOrigin: number
+  coordinate: {
+    x: number,
+    y: number
+  }
 }
 
 interface FinalState {
-  left: number
-  top: number
-  scale: number
-  rotate: number
+  scale?: number
+  rotate?: number,
+  coordinate?: {
+    x: number,
+    y: number
+  }
 }
 
 export default class WBSession {
@@ -32,31 +31,36 @@ export default class WBSession {
     this.selectedElm = elm
     const rect = elm.getBoundingClientRect()
     this.originalState = {
-      width: rect.width,
-      height: rect.height,
-      left: rect.left,
-      top: rect.top,
-      scale: Ruler.getScaleXY(elm).x,
-      rotate: Ruler.getRotationValue(elm),
-      distanceFromOrigin: Math.sqrt(Math.pow(rect.width, 2) + Math.pow(rect.height, 2)) / 2
+      coordinate: {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      }
     }
 
-    this.setFinal()
+    this.finalState = {
+      scale: 1,
+      rotate: 0,
+      coordinate: {
+        x: this.originalState.coordinate.x,
+        y: this.originalState.coordinate.y
+      }
+    }
   }
 
-  setFinal() {
+  setFinal(state: FinalState) {
     if (!this.selectedElm) {
       console.error('No selected element')
       return
     }
 
-    const rect = this.selectedElm.getBoundingClientRect()
-
-    this.finalState = {
-      left: rect.left,
-      top: rect.top,
-      scale: Ruler.getScaleXY(this.selectedElm).x,
-      rotate: Ruler.getRotationValue(this.selectedElm)
+    if ('scale' in state) {
+      this.finalState.scale = state.scale
+    }
+    if ('rotate' in state) {
+      this.finalState.rotate = state.rotate
+    }
+    if ('coordinate' in state) {
+      this.finalState.coordinate = state.coordinate
     }
   }
 
