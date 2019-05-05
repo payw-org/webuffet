@@ -1,4 +1,4 @@
-import WBStorage from "./WBStorage"
+import WBSession from "./WBSession"
 
 // Todo
 // Preserve delete, resize, more buttons rotation
@@ -9,11 +9,13 @@ export default class WBApexTool {
   private rotateBtn: HTMLElement
   private scaleBtn: HTMLElement
   private moreBtn: HTMLElement
-  private readonly wbStorage: WBStorage
+  private readonly wbSession: WBSession
 
-  constructor(apexToolElm: HTMLElement, wbStorage: WBStorage) {
+  private mode: undefined|'remove'|'rotate'|'scale' = undefined
+
+  constructor(apexToolElm: HTMLElement, wbSession: WBSession) {
     this.apexToolElm = apexToolElm
-    this.wbStorage = wbStorage
+    this.wbSession = wbSession
 
     // Store each button of apex tool
     this.removeBtn = this.apexToolElm.querySelector('.remove')
@@ -22,32 +24,39 @@ export default class WBApexTool {
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
     // Add event listeners
-    this.removeBtn.addEventListener('click', e => {
-      // Remove selected elm
+    window.addEventListener('mousedown', e => {
+      if (e.target instanceof HTMLElement) {
+        if (e.target.closest('#wbc-editing-boundary .remove')) {
+          console.log('remove btn')
+        } else if (e.target.closest('#wbc-editing-boundary .rotate')) {
+          console.log('rotate btn')
+        } else if (e.target.closest('#wbc-editing-boundary .scale')) {
+          console.log('scale btn')
+        } else if (e.target.closest('#wbc-editing-boundary')) {
+          console.log('move')
+        }
+      }
     })
 
-    this.rotateBtn.addEventListener('mousedown', e => {
-
-    })
-    window.addEventListener('mousemove', e => {
-
-    })
-
-    this.scaleBtn.addEventListener('mousedown', e => {
-
-    })
-    window.addEventListener('mousemove', e => {
-
-    })
-
-    this.moreBtn.addEventListener('click', e => {
-      
+    window.addEventListener('mouseup', e => {
+      this.mode = undefined
     })
   }
 
+  public start() {
+    this.apexToolElm.classList.remove('hidden')
+    this.setBoundingRectPos()
+    this.wbSession.wbState = 'apex'
+  }
+
+  public stop() {
+    this.apexToolElm.classList.add('hidden')
+    this.wbSession.wbState = 'pending'
+  }
+
   private setBoundingRectPos() {
-    const originalState = this.wbStorage.getOriginalState()
-    const finalState = this.wbStorage.getFinalState()
+    const originalState = this.wbSession.getOriginalState()
+    const finalState = this.wbSession.getFinalState()
 
     let scaledWidth = originalState.width * originalState.scale
     let scaledHeight = originalState.height * originalState.scale
@@ -70,7 +79,7 @@ export default class WBApexTool {
     this.rotateBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
     this.removeBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
     this.removeBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
+    // this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
+    // this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
   }
 }
