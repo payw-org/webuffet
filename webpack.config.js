@@ -1,3 +1,5 @@
+const WebpackMessages = require('webpack-messages')
+
 module.exports = {
 	entry: {
 		webuffet: ['./src/main']
@@ -9,11 +11,9 @@ module.exports = {
 		path: __dirname + '/extension/build',
 		filename: '[name].built.js'
 	},
-
 	resolve: {
 		extensions: [ '.js', '.ts', '.scss', 'html' ]
 	},
-
 	module: {
 		rules: [
 			{
@@ -80,4 +80,10 @@ module.exports = {
 			}
 		]
 	},
+	plugins: [
+		new WebpackMessages({
+      name: 'WEBuffet',
+      logger: str => console.log(`>> ${str}`)
+    })
+	]
 }
