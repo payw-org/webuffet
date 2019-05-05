@@ -1,10 +1,12 @@
 import Ruler from './Ruler'
-import WBStorage from './WBStorage'
+import WBSession from './WBSession'
 import WBSelector from './WBSelector'
+import WBApexTool from './WBApexTool'
 
 export default class WEBuffet {
-  private readonly wbStorage: WBStorage
+  private readonly wbSession: WBSession
   private readonly wbSelector: WBSelector
+  private readonly wbApexTool: WBApexTool
   longPressTimeout: number
   mouseMoveTimeout: number
   domSelected: boolean
@@ -47,23 +49,29 @@ export default class WEBuffet {
     this.wbDom = undefined
     this.selectedTarget = undefined
 
+    // Inject WEBuffet components into document
     let componentHTML = require('./templates/webuffet.html')
     this.wbComponents = new DOMParser().parseFromString(componentHTML, 'text/html').querySelector('#webuffet-components')
     document.body.insertBefore(this.wbComponents, document.body.firstChild)
-    this.wbSelectorDom = this.wbComponents.querySelector('#wbc-selector')
-    this.wbProgressBar = this.wbComponents.querySelector('#wbc-progress-bar')
-    this.wbProgressBar.addEventListener('transitionend', e => {
-      this.endSelectingMode()
-      this.startEditingMode()
-    })
+
+    // this.wbSelectorDom = this.wbComponents.querySelector('#wbc-selector')
+    // this.wbProgressBar = this.wbComponents.querySelector('#wbc-progress-bar')
+    // this.wbProgressBar.addEventListener('transitionend', e => {
+    //   this.endSelectingMode()
+    //   this.startEditingMode()
+    // })
 
     this.wbEditingBoundary = this.wbComponents.querySelector('#wbc-editing-boundary')
 
-    this.addListeners()
+    // this.addListeners()
 
 
-    this.wbStorage = new WBStorage()
-    this.wbSelector = new WBSelector(this.wbComponents.querySelector('#wbc-selector'), this.wbStorage)
+    this.wbSession = new WBSession()
+    this.wbSelector = new WBSelector(this.wbComponents.querySelector('#wbc-selector'), this.wbSession)
+    this.wbApexTool = new WBApexTool(this.wbComponents.querySelector('#wbc-editing-boundary'), this.wbSession)
+    this.wbSelector.whenScanningCompleted(() => {
+      this.wbApexTool.start()
+    })
   }
 
   setRectPos(
