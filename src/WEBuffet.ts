@@ -69,9 +69,6 @@ export default class WEBuffet {
     this.wbSession = new WBSession()
     this.wbSelector = new WBSelector(this.wbComponents.querySelector('#wbc-selector'), this.wbSession)
     this.wbApexTool = new WBApexTool(this.wbComponents.querySelector('#wbc-editing-boundary'), this.wbSession)
-    this.wbSelector.whenScanningCompleted(() => {
-      this.wbApexTool.start()
-    })
   }
 
   setRectPos(
