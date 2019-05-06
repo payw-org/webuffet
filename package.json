@@ -6,7 +6,8 @@
   "main": "main.js",
   "scripts": {
     "build": "npx webpack --config webpack.config.js",
-    "build:watch": "npx webpack --watch --config webpack.config.js"
+    "build:watch": "npx webpack --watch --config webpack.config.js",
+    "build:prod": "npx webpack --watch --config webpack.prod.js"
   },
   "author": "WEBuffet",
   "license": "MIT",
@@ -19,6 +20,7 @@
     "css-loader": "^2.1.1",
     "html-loader": "^0.5.5",
     "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-cli": "^6.1.2",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
@@ -31,9 +33,14 @@
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
+    "webpack-merge": "^4.2.1",
     "webpack-messages": "^2.0.4"
   },
   "dependencies": {
+    "chance": "^1.0.18",
+    "html2canvas": "^1.0.0-rc.1",
+    "jquery": "^3.4.1",
+    "jquery-ui": "^1.12.1",
     "vue": "^2.6.10"
   }
 }
