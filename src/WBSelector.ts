@@ -1,5 +1,6 @@
-import WBSession from "./WBSession"
-import ScannedEvent from "./interfaces/ScannedEvent"
+import WBSession from './WBSession'
+import ScannedEvent from './interfaces/events/ScannedEvent'
+import html2canvas from 'html2canvas'
 
 export default class WBSelector {
   private selectorElm: HTMLElement
@@ -76,6 +77,13 @@ export default class WBSelector {
     clearTimeout(this.mouseMoveTimeout)
     this.mouseMoveTimeout = window.setTimeout(() => {
       this.progressBarElm.classList.add('expand')
+      // html2canvas(this.hoverElm, {
+      //   useCORS: true,
+      //   backgroundColor: null
+      // }).then(function (canvas: HTMLCanvasElement) {
+      //   let img = canvas.toDataURL('image/png')
+      //   document.write('<img src="' + img + '" />')
+      // })
     }, 700)
   }
 
@@ -92,12 +100,12 @@ export default class WBSelector {
       return
     }
 
-    this.selectorElm.classList.remove('hidden')
+    this.selectorElm.classList.remove('wb-hidden')
     this.wbSession.wbState = 'select'
   }
 
   private stop() {
-    this.selectorElm.classList.add('hidden')
+    this.selectorElm.classList.add('wb-hidden')
     this.wbSession.wbState = 'pending'
   }
 }
