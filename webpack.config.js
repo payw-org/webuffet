@@ -1,3 +1,4 @@
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WebpackMessages = require('webpack-messages')
 
 module.exports = {
@@ -12,10 +13,18 @@ module.exports = {
 		filename: '[name].built.js'
 	},
 	resolve: {
-		extensions: [ '.js', '.ts', '.scss', 'html' ]
+		extensions: ['.js', '.ts', '.css', '.scss', '.html', '.vue'],
+		alias: {
+			vue$: 'vue/dist/vue.esm.js',
+			Components: __dirname + '/src/components/'
+		}
 	},
 	module: {
 		rules: [
+			{
+        test: /\.vue$/,
+				loader: 'vue-loader'
+      },
 			{
 				test: [/\.tsx?$/],
 				exclude: /(node_modules|bower_components)/,
@@ -44,7 +53,12 @@ module.exports = {
 			{
 				test: [/\.scss$/],
 				use: [
-					'style-loader',
+					{
+						loader: 'style-loader',
+						options: {
+							insertInto: 'html'
+						}
+					},
 					'css-loader',
 					{
 						loader: 'postcss-loader',
@@ -63,8 +77,24 @@ module.exports = {
 			{
 				test: [/\.css$/],
 				use: [
-					'style-loader',
-					'css-loader'
+					{
+						loader: 'style-loader',
+						options: {
+							insertInto: 'html'
+						}
+					},
+					'css-loader',
+					{
+						loader: 'postcss-loader',
+						options: {
+							plugins: () => [
+								require('autoprefixer')
+								({
+									'browsers': ['> 1%', 'last 2 versions']
+								})
+							]
+						}
+					},
 				]
       },
       {
@@ -81,6 +111,7 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new VueLoaderPlugin(),
 		new WebpackMessages({
       name: 'WEBuffet',
       logger: str => console.log(`>> ${str}`)
