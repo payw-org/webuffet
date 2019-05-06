@@ -1,6 +1,7 @@
 import WBSession from "./WBSession"
 import Ruler from "./Ruler"
-import ScannedEvent from "./interfaces/ScannedEvent"
+import ScannedEvent from "./interfaces/events/ScannedEvent"
+import Thanos from "./lib/Thanos"
 
 // Todo
 // Preserve delete, resize, more buttons rotation
@@ -36,7 +37,8 @@ export default class WBApexTool {
 
     // Add event listeners
     this.removeBtn.addEventListener('click', e => {
-      console.log('remove')
+      Thanos.snapFingers(this.wbSession.getSelectedElement())
+      this.stop()
     })
 
     document.addEventListener('scanned', this.onScanned.bind(this))
@@ -122,15 +124,14 @@ export default class WBApexTool {
   }
 
   public start() {
-    this.apexToolElm.classList.remove('hidden')
+    this.apexToolElm.classList.remove('wb-hidden')
     this.setBoundingRectPos()
     this.wbSession.wbState = 'apex'
-    console.log('wbSession state set to ', this.wbSession.wbState)
   }
 
   public stop() {
     console.log('changed to pending')
-    this.apexToolElm.classList.add('hidden')
+    this.apexToolElm.classList.add('wb-hidden')
     this.wbSession.wbState = 'pending'
   }
 
