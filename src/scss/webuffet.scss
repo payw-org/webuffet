@@ -3,10 +3,14 @@ body {
     cursor: default !important;
     user-select: none;
   }
+
+  .dust {
+    position: absolute;
+  }
 }
 
 #webuffet-components {
-  .hidden {
+  .wb-hidden {
     display: none;
   }
 
