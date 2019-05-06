@@ -1,57 +1,81 @@
 import WBSession from "./WBSession"
+import ScannedEvent from "./interfaces/ScannedEvent"
 
 export default class WBSelector {
   private selectorElm: HTMLElement
+  private progressBarElm: HTMLElement
+  private hoverElm: HTMLElement
   private readonly wbSession: WBSession
   private mouseMoveTimeout: number
   private triggerTimeout: number
-  private progressBarDom: HTMLElement
-  private hoverElm: HTMLElement
-  private isScanCompleteSet: boolean = false
 
   constructor(selectorElm: HTMLElement, wbSession: WBSession) {
     this.selectorElm = selectorElm
     this.wbSession = wbSession
-    this.progressBarDom = this.selectorElm.querySelector('#wbc-progress-bar')
+    this.progressBarElm = this.selectorElm.querySelector('#wbc-progress-bar')
 
-    // Event Listeners
-    window.addEventListener('mouseover', e => {
-      if (this.wbSession.wbState === 'select' && e.target instanceof HTMLElement) {
-        this.hoverElm = e.target
-        this.setBoundingRectPos()
-      }
-    })
+    this.attachEventListeners()
+  }
 
-    window.addEventListener('mousedown', e => {
-      this.triggerTimeout = window.setTimeout(() => {
-        if (e.target instanceof HTMLElement) {
-          this.hoverElm = e.target
-          this.setBoundingRectPos()
+  private attachEventListeners() {
+    window.addEventListener('mouseover', this.onMouseOver.bind(this))
+    window.addEventListener('mousedown', this.onMouseDown.bind(this))
+    window.addEventListener('mouseup', this.onMouseUp.bind(this))
+    window.addEventListener('mousemove', this.onMouseMove.bind(this))
+
+    this.progressBarElm.addEventListener('transitionend', () => {
+      this.stop()
+      this.wbSession.setOriginal(this.hoverElm)
+
+      let e: ScannedEvent = new CustomEvent(
+        'scanned',
+        {
+          detail: {
+            target: this.hoverElm
+          },
+          bubbles: false,
+          cancelable: false
         }
-        this.start()
-      }, 1000)
-    })
+      )
 
-    window.addEventListener('mouseup', e => {
-      window.clearTimeout(this.triggerTimeout)
-    })
-
-    // When stop moving a pointer,
-    // scanning effect starts after an interval.
-    window.addEventListener('mousemove', e => {
-      clearTimeout(this.triggerTimeout)
-
-      if (this.wbSession.wbState === 'select') {
-        this.startScanning()
-      }
+      document.dispatchEvent(e)
     })
   }
 
+  private onMouseDown(e: MouseEvent) {
+    this.triggerTimeout = window.setTimeout(() => {
+      if (e.target instanceof HTMLElement) {
+        this.hoverElm = e.target
+        this.setBoundingRectPos()
+      }
+      this.start()
+    }, 1000)
+  }
+
+  private onMouseUp(e: MouseEvent) {
+    window.clearTimeout(this.triggerTimeout)
+  }
+
+  private onMouseMove(e: MouseEvent) {
+    clearTimeout(this.triggerTimeout)
+    
+    if (this.wbSession.wbState === 'select') {
+      this.startScanning()
+    }
+  }
+
+  private onMouseOver(e: MouseEvent) {
+    if (this.wbSession.wbState === 'select' && e.target instanceof HTMLElement) {
+      this.hoverElm = e.target
+      this.setBoundingRectPos()
+    }
+  }
+
   private startScanning() {
-    this.progressBarDom.classList.remove('expand')
+    this.progressBarElm.classList.remove('expand')
     clearTimeout(this.mouseMoveTimeout)
     this.mouseMoveTimeout = window.setTimeout(() => {
-      this.progressBarDom.classList.add('expand')
+      this.progressBarElm.classList.add('expand')
     }, 700)
   }
 
@@ -64,11 +88,6 @@ export default class WBSelector {
   }
 
   private start() {
-    if (!this.isScanCompleteSet) {
-      console.error('whenScanningCompleted method is not set!')
-      return
-    }
-
     if (this.wbSession.wbState !== 'pending') {
       return
     }
@@ -80,15 +99,5 @@ export default class WBSelector {
   private stop() {
     this.selectorElm.classList.add('hidden')
     this.wbSession.wbState = 'pending'
-  }
-
-  whenScanningCompleted(switchMode: Function) {
-    this.isScanCompleteSet = true
-
-    this.progressBarDom.addEventListener('transitionend', () => {
-      this.wbSession.setOriginal(this.hoverElm)
-      this.stop()
-      switchMode()
-    })
   }
 }
