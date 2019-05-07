@@ -1,6 +1,7 @@
 {
 	"name": "WEBuffet",
 	"version": "1.0",
+	"manifest_version": 2,
 	"description": "",
 	"permissions": [
 		"https://*/*",
@@ -28,6 +29,5 @@
 	],
 	"page_action": {
 		"default_popup": "popup.html"
-	},
-	"manifest_version": 2
+	}
 }
