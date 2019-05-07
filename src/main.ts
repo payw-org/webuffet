@@ -5,7 +5,7 @@ let wb = undefined
 
 require('./lib/jQueryUI')
 
-let wait = function (e) {
+let wait = function () {
   timeout = window.setTimeout(() => {
     // create WEBuffet instance after mouse hold
     // for better performance
@@ -16,10 +16,28 @@ let wait = function (e) {
   }, 0)
 }
 
-let clear = function (e) {
+let clear = function () {
   clearTimeout(timeout)
 }
 
 window.addEventListener('mousedown', wait)
 window.addEventListener('mousemove', clear)
 window.addEventListener('mouseup', clear)
+
+document.addEventListener('closeconsole', e => {
+  console.log('closeconsole event detected')
+  window.addEventListener('mousedown', wait)
+  window.addEventListener('mousemove', clear)
+  window.addEventListener('mouseup', clear)
+})
+
+// chrome.storage.sync.set({ 'test': 'hello' }, function(){
+//   //  A data saved callback omg so fancy
+// });
+
+chrome.storage.sync.clear()
+
+chrome.storage.sync.get(['test'], function(items){
+  //  items = [ { "yourBody": "myBody" } ]
+  console.log(items)
+});
