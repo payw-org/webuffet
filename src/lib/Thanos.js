@@ -10,7 +10,6 @@ export default class Thanos {
     this.imageDataArray = []
     this.canvasCount = 35
     this.chance = new Chance()
-    console.log(this.chance.animal())
 
     html2canvas(elm, {
       useCORS: true
