@@ -130,7 +130,6 @@ export default class WBApexTool {
   }
 
   public stop() {
-    console.log('changed to pending')
     this.apexToolElm.classList.add('wb-hidden')
     this.wbSession.wbState = 'pending'
   }
