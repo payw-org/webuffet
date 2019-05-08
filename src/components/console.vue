@@ -82,7 +82,7 @@ export default {
   }
 
   &.hidden {
-    transform: scale(1.2);
+    transform: scale(1.1);
     opacity: 0;
     pointer-events: none;
   }
