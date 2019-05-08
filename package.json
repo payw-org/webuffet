@@ -7,7 +7,8 @@
   "scripts": {
     "build": "npx webpack --config webpack.config.js",
     "build:watch": "npx webpack --watch --config webpack.config.js",
-    "build:prod": "npx webpack --watch --config webpack.prod.js"
+    "build:prod": "npx webpack --config webpack.prod.js",
+    "build:prod:watch": "npx webpack --watch --config webpack.prod.js"
   },
   "author": "WEBuffet",
   "license": "MIT",
