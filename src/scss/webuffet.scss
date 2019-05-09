@@ -1,10 +1,10 @@
 body {
-  &.webuffet-active * {
+  &.webuffet-activated * {
     cursor: default !important;
     user-select: none;
   }
 
-  .dust {
+  .wb-thanos-dust {
     position: absolute;
   }
 }
@@ -124,7 +124,7 @@ body {
     }
 
     #wbc-selector-background {
-      opacity: .4;
+      opacity: .5;
 
       .bg-comp {
         background-color: #161616;
