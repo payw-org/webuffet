@@ -38,8 +38,8 @@ export default class WBSession {
     }
 
     this.finalState = {
-      scale: 1,
-      rotate: 0,
+      scale: Ruler.getScaleXY(elm).x,
+      rotate: Ruler.getRotationValue(elm),
       coordinate: {
         x: this.originalState.coordinate.x,
         y: this.originalState.coordinate.y
