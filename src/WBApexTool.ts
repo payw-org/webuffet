@@ -1,6 +1,5 @@
 import WBSession from "./WBSession"
 import Ruler from "./Ruler"
-import ScannedEvent from "./interfaces/events/ScannedEvent"
 import Thanos from "./lib/Thanos"
 
 // Todo
@@ -41,10 +40,13 @@ export default class WBApexTool {
       this.stop()
     })
 
-    document.addEventListener('scanned', this.onScanned.bind(this))
+    document.addEventListener('webuffetscan', this.onScanned.bind(this))
     window.addEventListener('mousedown', this.onMouseDown.bind(this))
     window.addEventListener('mousemove', this.onMouseMove.bind(this))
     window.addEventListener('mouseup', this.onMouseUp.bind(this))
+    ;['scroll', 'resize'].forEach(eventName => {
+      window.addEventListener(eventName, this.setBoundingRectPos.bind(this))
+    })
   }
 
   private onMouseDown(e: MouseEvent) {
@@ -110,6 +112,8 @@ export default class WBApexTool {
       this.wbSession.setFinal({
         rotate: newAngle
       })
+    } else if (this.mode === 'move') {
+      
     }
     
     this.setBoundingRectPos()
@@ -119,7 +123,7 @@ export default class WBApexTool {
     if (this.mode) this.mode = undefined
   }
 
-  private onScanned(e: ScannedEvent) {
+  private onScanned() {
     this.start()
   }
 
