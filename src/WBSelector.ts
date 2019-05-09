@@ -1,57 +1,71 @@
-import WBSession from "./WBSession"
+import WBSession from './WBSession'
+import html2canvas from 'html2canvas'
 
 export default class WBSelector {
   private selectorElm: HTMLElement
+  private progressBarElm: HTMLElement
+  private hoverElm: HTMLElement
   private readonly wbSession: WBSession
   private mouseMoveTimeout: number
   private triggerTimeout: number
-  private progressBarDom: HTMLElement
-  private hoverElm: HTMLElement
-  private isScanCompleteSet: boolean = false
 
   constructor(selectorElm: HTMLElement, wbSession: WBSession) {
     this.selectorElm = selectorElm
     this.wbSession = wbSession
-    this.progressBarDom = this.selectorElm.querySelector('#wbc-progress-bar')
+    this.progressBarElm = this.selectorElm.querySelector('#wbc-progress-bar')
 
-    // Event Listeners
-    window.addEventListener('mouseover', e => {
-      if (this.wbSession.wbState === 'select' && e.target instanceof HTMLElement) {
-        this.hoverElm = e.target
-        this.setBoundingRectPos()
-      }
+    this.attachEventListeners()
+  }
+
+  private attachEventListeners() {
+    window.addEventListener('mousemove', this.onMouseMove.bind(this))
+    window.addEventListener('mouseover', this.onMouseOver.bind(this))
+    window.addEventListener('keydown', this.onKeyDown.bind(this))
+
+    this.progressBarElm.addEventListener('transitionend', () => {
+      this.stop()
+      this.wbSession.setOriginal(this.hoverElm)
+
+      document.dispatchEvent(new CustomEvent('webuffetscan'))
     })
 
-    window.addEventListener('mousedown', e => {
-      this.triggerTimeout = window.setTimeout(() => {
-        if (e.target instanceof HTMLElement) {
-          this.hoverElm = e.target
-          this.setBoundingRectPos()
-        }
-        this.start()
-      }, 1000)
-    })
+    document.addEventListener('startselector', this.start.bind(this))
+  }
 
-    window.addEventListener('mouseup', e => {
-      window.clearTimeout(this.triggerTimeout)
-    })
+  private onMouseMove(e: MouseEvent) {
+    if (this.wbSession.wbState === 'select') {
+      this.startScanning()
+    }
+  }
 
-    // When stop moving a pointer,
-    // scanning effect starts after an interval.
-    window.addEventListener('mousemove', e => {
-      clearTimeout(this.triggerTimeout)
+  private onMouseOver(e: MouseEvent) {
+    if (this.wbSession.wbState === 'select' && e.target instanceof HTMLElement) {
+      this.hoverElm = e.target
+      this.setBoundingRectPos()
+    }
+  }
 
-      if (this.wbSession.wbState === 'select') {
-        this.startScanning()
-      }
-    })
+  private onKeyDown(e: KeyboardEvent) {
+    if (this.wbSession.wbState !== 'select') return
+    
+    if (e.key === 'Escape') {
+      this.stop()
+      document.dispatchEvent(new CustomEvent('loadconsole'))
+    }
   }
 
   private startScanning() {
-    this.progressBarDom.classList.remove('expand')
+    this.progressBarElm.classList.remove('expand')
     clearTimeout(this.mouseMoveTimeout)
     this.mouseMoveTimeout = window.setTimeout(() => {
-      this.progressBarDom.classList.add('expand')
+      this.progressBarElm.classList.add('expand')
+      // html2canvas(this.hoverElm, {
+      //   useCORS: true,
+      //   backgroundColor: null
+      // }).then(function (canvas: HTMLCanvasElement) {
+      //   let img = canvas.toDataURL('image/png')
+      //   document.write('<img src="' + img + '" />')
+      // })
     }, 700)
   }
 
@@ -64,31 +78,17 @@ export default class WBSelector {
   }
 
   private start() {
-    if (!this.isScanCompleteSet) {
-      console.error('whenScanningCompleted method is not set!')
-      return
-    }
-
     if (this.wbSession.wbState !== 'pending') {
       return
     }
 
-    this.selectorElm.classList.remove('hidden')
+    this.selectorElm.classList.remove('wb-hidden')
     this.wbSession.wbState = 'select'
   }
 
   private stop() {
-    this.selectorElm.classList.add('hidden')
+    this.progressBarElm.classList.remove('expand')
+    this.selectorElm.classList.add('wb-hidden')
     this.wbSession.wbState = 'pending'
-  }
-
-  whenScanningCompleted(switchMode: Function) {
-    this.isScanCompleteSet = true
-
-    this.progressBarDom.addEventListener('transitionend', () => {
-      this.wbSession.setOriginal(this.hoverElm)
-      this.stop()
-      switchMode()
-    })
   }
 }

@@ -1,26 +1,17 @@
 body {
-  &.webuffet-active * {
+  &.webuffet-activated * {
     cursor: default !important;
     user-select: none;
+  }
+
+  .wb-thanos-dust {
+    position: absolute;
   }
 }
 
 #webuffet-components {
-  .hidden {
+  .wb-hidden {
     display: none;
-  }
-
-  #wbc-console {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.7);
-    z-index: 2147483646;
-    overflow-x: hidden;
-    overflow-y: auto;
   }
 
   #wbc-editing-boundary {
@@ -30,6 +21,7 @@ body {
     top: 0;
     box-sizing: border-box;
     border: 2px solid #05a3ff;
+    border-radius: 5px;
     z-index: 2147483646;
     box-shadow: 0 5px 20px rgba(0,0,0,.2);
     transform-origin: 50% 50%;
@@ -45,19 +37,10 @@ body {
       cursor: default;
       box-sizing: border-box;
       box-shadow: 0 2px 7px rgba(0,0,0,.3);
-      transition: transform .2s ease;
       background-repeat: no-repeat;
       background-size: 17px;
       background-position: center;
       $margin: 13px;
-
-      &:hover {
-        transform: scale(1.3);
-      }
-
-      &:active {
-        transform: scale(0.9);
-      }
 
       &.remove {
         left: -$margin;
@@ -141,7 +124,7 @@ body {
     }
 
     #wbc-selector-background {
-      opacity: .4;
+      opacity: .5;
 
       .bg-comp {
         background-color: #161616;

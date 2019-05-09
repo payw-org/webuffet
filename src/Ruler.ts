@@ -17,12 +17,18 @@ export default class Ruler {
   }
 
   static getScaleXY(elm: HTMLElement) {
-    let style = window.getComputedStyle(elm)
-    let matrix = new WebKitCSSMatrix(style.webkitTransform)
-    
+    let matrixRegex = /matrix\(\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*)\)/
+    let matches = window.getComputedStyle(elm).getPropertyValue('-webkit-transform').match(matrixRegex)
+    let x = 1, y = 1
+    if (matches && matches[1]) {
+      x = Number(matches[1])
+    }
+    if (matches && matches[2]) {
+      y = Number(matches[2])
+    }
     return {
-      x: matrix.a,
-      y: matrix.d
+      x: x,
+      y: y 
     }
   }
 
