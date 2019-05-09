@@ -18,7 +18,7 @@ export default class WEBuffet {
     this.wbComponents = new DOMParser().parseFromString(componentHTML, 'text/html').querySelector('#webuffet-components')
     document.body.insertBefore(this.wbComponents, document.body.firstChild)
 
-    // Add Console
+    // Add Console Component
     new Vue({
       el: "#wbc-console",
       template: '<Console/>',
@@ -28,5 +28,16 @@ export default class WEBuffet {
     this.wbSession = new WBSession()
     this.wbSelector = new WBSelector(this.wbComponents.querySelector('#wbc-selector'), this.wbSession)
     this.wbApexTool = new WBApexTool(this.wbComponents.querySelector('#wbc-editing-boundary'), this.wbSession)
+
+    document.addEventListener('consolestop', this.stop)
+  }
+
+  start() {
+    document.body.classList.add('webuffet-activated')
+    document.dispatchEvent(new CustomEvent('loadconsole'))
+  }
+
+  stop() {
+    document.body.classList.remove('webuffet-activated')
   }
 }
