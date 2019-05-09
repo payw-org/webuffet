@@ -1,7 +1,6 @@
 import html2canvas from 'html2canvas'
 import Chance from 'chance'
 import $ from 'jquery'
-import { easing } from 'jquery-ui'
 
 export default class Thanos {
   constructor() {}
@@ -40,7 +39,7 @@ export default class Thanos {
       //create canvas for each imageData and append to target element
       for (let i = 0; i < this.canvasCount; i++) {
         let c = this.newCanvasFromImageData(this.imageDataArray[i], canvas.width, canvas.height);
-        c.classList.add("dust");
+        c.classList.add("wb-thanos-dust");
         // $("body").append(c);
         placeholder.appendChild(c)
       }
@@ -50,7 +49,7 @@ export default class Thanos {
       //clear all children except the canvas
       // $(".content").children().not(".dust").fadeOut(3500);
       $(elm).fadeOut(3500)
-      let dusts = document.querySelectorAll('.dust')
+      let dusts = document.querySelectorAll('.wb-thanos-dust')
       for (let i = 0; i < dusts.length; i++) {
         this.animateBlur($(dusts[i]),0.8,800)
         setTimeout(() => {
