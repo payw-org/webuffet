@@ -1,15 +1,20 @@
 import WEBuffet from './WEBuffet'
 
 let timeout = 0
-let wb = undefined
+let wb: WEBuffet|undefined = undefined
 
-require('./lib/jQueryUI')
+require('./lib/jquery-ui.min.js')
 
 let wait = function () {
   timeout = window.setTimeout(() => {
     // create WEBuffet instance after mouse hold
     // for better performance
-    wb = new WEBuffet()
+    if (!wb) {
+      wb = new WEBuffet()
+    }
+
+    wb.start()
+    
     window.removeEventListener('mousedown', wait)
     window.removeEventListener('mousemove', clear)
     window.removeEventListener('mouseup', clear)
@@ -24,8 +29,7 @@ window.addEventListener('mousedown', wait)
 window.addEventListener('mousemove', clear)
 window.addEventListener('mouseup', clear)
 
-document.addEventListener('closeconsole', e => {
-  console.log('closeconsole event detected')
+document.addEventListener('consolestop', e => {
   window.addEventListener('mousedown', wait)
   window.addEventListener('mousemove', clear)
   window.addEventListener('mouseup', clear)
