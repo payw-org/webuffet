@@ -32,6 +32,12 @@ export default class WBSelector {
     document.addEventListener('startselector', this.start.bind(this))
   }
 
+  private detachEventListeners() {
+    window.removeEventListener('mousemove', this.onMouseMove.bind(this))
+    window.removeEventListener('mouseover', this.onMouseOver.bind(this))
+    window.removeEventListener('keydown', this.onKeyDown.bind(this))
+  }
+
   private onMouseMove(e: MouseEvent) {
     if (this.wbSession.wbState === 'select') {
       this.startScanning()
@@ -49,6 +55,7 @@ export default class WBSelector {
     if (this.wbSession.wbState !== 'select') return
     
     if (e.key === 'Escape') {
+      this.detachEventListeners()
       this.stop()
       document.dispatchEvent(new CustomEvent('loadconsole'))
     }
@@ -84,6 +91,7 @@ export default class WBSelector {
 
     this.selectorElm.classList.remove('wb-hidden')
     this.wbSession.wbState = 'select'
+    this.attachEventListeners()
   }
 
   private stop() {

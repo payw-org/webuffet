@@ -38,16 +38,7 @@ export default class WBApexTool {
     this.removeBtn.addEventListener('click', e => {
       this.remove();
     })
-
     document.addEventListener('webuffetscan', this.onScanned.bind(this))
-    window.addEventListener('mousedown', this.onMouseDown.bind(this))
-    window.addEventListener('mousemove', this.onMouseMove.bind(this))
-    window.addEventListener('mouseup', this.onMouseUp.bind(this))
-    ;['scroll', 'resize'].forEach(eventName => {
-      window.addEventListener(eventName, this.setBoundingRectPos.bind(this))
-    })
-
-    window.addEventListener('keydown', this.escape.bind(this));
   }
 
   private onMouseDown(e: MouseEvent) {
@@ -132,11 +123,26 @@ export default class WBApexTool {
     this.apexToolElm.classList.remove('wb-hidden')
     this.setBoundingRectPos()
     this.wbSession.wbState = 'apex'
+    document.addEventListener('webuffetscan', this.onScanned.bind(this))
+    window.addEventListener('mousedown', this.onMouseDown.bind(this))
+    window.addEventListener('mousemove', this.onMouseMove.bind(this))
+    window.addEventListener('mouseup', this.onMouseUp.bind(this))
+    ;['scroll', 'resize'].forEach(eventName => {
+      window.addEventListener(eventName, this.setBoundingRectPos.bind(this))
+    })
+    window.addEventListener('keydown', this.escape.bind(this));
   }
 
   public stop() {
     this.apexToolElm.classList.add('wb-hidden')
     this.wbSession.wbState = 'pending'
+    window.removeEventListener('mousedown', this.onMouseDown.bind(this))
+    window.removeEventListener('mousemove', this.onMouseMove.bind(this))
+    window.removeEventListener('mouseup', this.onMouseUp.bind(this))
+    ;['scroll', 'resize'].forEach(eventName => {
+      window.removeEventListener(eventName, this.setBoundingRectPos.bind(this))
+    })
+    window.removeEventListener('keydown', this.escape.bind(this));
   }
 
   private setBoundingRectPos() {
