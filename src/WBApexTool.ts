@@ -36,9 +36,7 @@ export default class WBApexTool {
 
     // Add event listeners
     this.removeBtn.addEventListener('click', e => {
-      // Thanos.snapFingers(this.wbSession.getSelectedElement())
-      this.wbSession.getSelectedElement().style.display = 'none'
-      this.stop()
+      this.remove();
     })
 
     document.addEventListener('webuffetscan', this.onScanned.bind(this))
@@ -48,6 +46,8 @@ export default class WBApexTool {
     ;['scroll', 'resize'].forEach(eventName => {
       window.addEventListener(eventName, this.setBoundingRectPos.bind(this))
     })
+
+    window.addEventListener('keydown', this.escape.bind(this));
   }
 
   private onMouseDown(e: MouseEvent) {
@@ -161,5 +161,20 @@ export default class WBApexTool {
     this.removeBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
     // this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
     // this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
+  }
+
+  private remove() {
+    // Stop ApexTool and go back to Selector after remove element
+    this.wbSession.getSelectedElement().style.display = 'none'
+    this.stop()
+    document.dispatchEvent(new CustomEvent('startselector'))
+  }
+
+  private escape(e : KeyboardEvent) {
+    // Escape ApexTool with no operations
+    if(e.key == "Escape") {
+      this.stop()
+      document.dispatchEvent(new CustomEvent('startselector'))
+    } else return;
   }
 }
