@@ -36,7 +36,8 @@ export default class WBApexTool {
 
     // Add event listeners
     this.removeBtn.addEventListener('click', e => {
-      Thanos.snapFingers(this.wbSession.getSelectedElement())
+      // Thanos.snapFingers(this.wbSession.getSelectedElement())
+      this.wbSession.getSelectedElement().style.display = 'none'
       this.stop()
     })
 
