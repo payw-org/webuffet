@@ -1,5 +1,6 @@
 import WBSession from './WBSession'
 import html2canvas from 'html2canvas'
+import EventCollector from './EventCollector'
 
 export default class WBSelector {
   private selectorElm: HTMLElement
@@ -8,34 +9,27 @@ export default class WBSelector {
   private readonly wbSession: WBSession
   private mouseMoveTimeout: number
   private triggerTimeout: number
+  private eventCollector: EventCollector
 
   constructor(selectorElm: HTMLElement, wbSession: WBSession) {
     this.selectorElm = selectorElm
     this.wbSession = wbSession
     this.progressBarElm = this.selectorElm.querySelector('#wbc-progress-bar')
+    this.eventCollector = new EventCollector()
 
-    this.attachEventListeners()
+    document.addEventListener('startselector', this.start.bind(this))
   }
 
   private attachEventListeners() {
-    window.addEventListener('mousemove', this.onMouseMove.bind(this))
-    window.addEventListener('mouseover', this.onMouseOver.bind(this))
-    window.addEventListener('keydown', this.onKeyDown.bind(this))
-
-    this.progressBarElm.addEventListener('transitionend', () => {
+    this.eventCollector.attachEvent(window, 'mousemove', this.onMouseMove.bind(this))
+    this.eventCollector.attachEvent(window, 'mouseover', this.onMouseOver.bind(this))
+    this.eventCollector.attachEvent(window, 'keydown', this.onKeyDown.bind(this))
+    this.eventCollector.attachEvent(this.progressBarElm, 'transitionend', () => {
       this.stop()
       this.wbSession.setOriginal(this.hoverElm)
 
       document.dispatchEvent(new CustomEvent('webuffetscan'))
     })
-
-    document.addEventListener('startselector', this.start.bind(this))
-  }
-
-  private detachEventListeners() {
-    window.removeEventListener('mousemove', this.onMouseMove.bind(this))
-    window.removeEventListener('mouseover', this.onMouseOver.bind(this))
-    window.removeEventListener('keydown', this.onKeyDown.bind(this))
   }
 
   private onMouseMove(e: MouseEvent) {
@@ -55,7 +49,6 @@ export default class WBSelector {
     if (this.wbSession.wbState !== 'select') return
     
     if (e.key === 'Escape') {
-      this.detachEventListeners()
       this.stop()
       document.dispatchEvent(new CustomEvent('loadconsole'))
     }
@@ -98,5 +91,6 @@ export default class WBSelector {
     this.progressBarElm.classList.remove('expand')
     this.selectorElm.classList.add('wb-hidden')
     this.wbSession.wbState = 'pending'
+    this.eventCollector.clearEvent()
   }
 }
