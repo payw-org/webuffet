@@ -1,5 +1,6 @@
 import Ruler from "./Ruler"
 
+//Save infromation for return to its original form
 interface OriginalState {
   coordinate: {
     x: number,

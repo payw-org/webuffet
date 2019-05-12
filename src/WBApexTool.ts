@@ -1,6 +1,7 @@
 import WBSession from "./WBSession"
 import Ruler from "./Ruler"
 import Thanos from "./lib/Thanos"
+import EventCollector from "./EventCollector"
 
 // Todo
 // Preserve delete, resize, more buttons rotation
@@ -24,9 +25,14 @@ export default class WBApexTool {
   private lastFinalScale: number
   private lastFinalRoate: number
 
+  private eventCollector: EventCollector
+
   constructor(apexToolElm: HTMLElement, wbSession: WBSession) {
     this.apexToolElm = apexToolElm
     this.wbSession = wbSession
+
+    // Create event collector instance
+    this.eventCollector = new EventCollector()
 
     // Store each button of apex tool
     this.removeBtn = this.apexToolElm.querySelector('.remove')
@@ -34,20 +40,8 @@ export default class WBApexTool {
     this.scaleBtn = this.apexToolElm.querySelector('.scale')
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
-    // Add event listeners
-    this.removeBtn.addEventListener('click', e => {
-      // Thanos.snapFingers(this.wbSession.getSelectedElement())
-      this.wbSession.getSelectedElement().style.display = 'none'
-      this.stop()
-    })
-
-    document.addEventListener('webuffetscan', this.onScanned.bind(this))
-    window.addEventListener('mousedown', this.onMouseDown.bind(this))
-    window.addEventListener('mousemove', this.onMouseMove.bind(this))
-    window.addEventListener('mouseup', this.onMouseUp.bind(this))
-    ;['scroll', 'resize'].forEach(eventName => {
-      window.addEventListener(eventName, this.setBoundingRectPos.bind(this))
-    })
+    // Add apex tool triggering event listener
+    document.addEventListener('webuffetscan', this.start.bind(this))
   }
 
   private onMouseDown(e: MouseEvent) {
@@ -124,21 +118,49 @@ export default class WBApexTool {
     if (this.mode) this.mode = undefined
   }
 
-  private onScanned() {
-    this.start()
+  private onKeyDown(e: KeyboardEvent) {
+    // Escape ApexTool with no operations
+    if(e.key == "Escape") {
+      this.stop()
+      document.dispatchEvent(new CustomEvent('startselector'))
+    } else {
+      return
+    }
   }
 
+  // Start the ApexTool functioning
   public start() {
+    // Show UI
     this.apexToolElm.classList.remove('wb-hidden')
+    // Set UI's position
     this.setBoundingRectPos()
+    // Set WEBuffet session's state to 'apex'
     this.wbSession.wbState = 'apex'
+    
+    // Add event listeners using EventCollector
+    this.eventCollector.attachEvent(window, 'mousedown', this.onMouseDown.bind(this))
+    this.eventCollector.attachEvent(window, 'mousemove', this.onMouseMove.bind(this))
+    this.eventCollector.attachEvent(window, 'mouseup', this.onMouseUp.bind(this))
+    ;['scroll', 'resize'].forEach(eventName => {
+      this.eventCollector.attachEvent(window, eventName, this.setBoundingRectPos.bind(this))
+    })
+    this.eventCollector.attachEvent(window, 'keydown', this.onKeyDown.bind(this))
+    this.eventCollector.attachEvent(window, 'click', () => {
+      this.remove();
+    })
   }
 
   public stop() {
+    // Hide UI
     this.apexToolElm.classList.add('wb-hidden')
+    // Set WEBuffet session's state to 'pending'
     this.wbSession.wbState = 'pending'
+    // Remove all event listeners
+    this.eventCollector.clearEvent()
   }
 
+  // sets the position and the shape of ApexTool
+  // based on the selected element
   private setBoundingRectPos() {
     const selectedElm = this.wbSession.getSelectedElement()
     const rect = selectedElm.getBoundingClientRect()
@@ -161,5 +183,13 @@ export default class WBApexTool {
     this.removeBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
     // this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
     // this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
+  }
+
+  // removes the selected element
+  private remove() {
+    // Stop ApexTool and go back to Selector after remove element
+    this.wbSession.getSelectedElement().style.display = 'none'
+    this.stop()
+    document.dispatchEvent(new CustomEvent('startselector'))
   }
 }
