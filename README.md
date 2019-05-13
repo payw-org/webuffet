@@ -5,6 +5,7 @@ WEBuffet allows clients to manipulate any website as your tastes by deleting, mo
 
 ## Build instructions
 You must install **Node.js** and **NPM** before following the instructions below.
+Node.js download : https://nodejs.org/en/
 
 1. Go to `src` directory
 ```bash
@@ -27,13 +28,38 @@ npm run build
 1. Open Chrome "Settings" -> "Extensions"
 ![Getting started](./img/img1.png)
 
-
 2. Activate "Developer mode" and Click "Load unpacked"
 ![Getting started](./img/img2.png)
 
 3. Choose `path/extension` folder and click select
 ![Getting started](./img/img3.png)
 
-4. Go any website and click anywhere for 1 second. Then you can activate webuffet.
-![Getting started](./img/img4.png)
-![Getting started](./img/img5.png)
+4. Now activate WEBuffet and enjoy our program
+![Getting started](./img/img6.png)
+
+
+## How to use WEBuffet
+
+1. After activate WEBuffet, go to any site you want to change
+   (If it's working, the WEBuffet icon will appear)
+![Getting started](./img/img7.png)
+
+
+2. Click anywhere on website and click `+` button
+![Getting started](./img/img8.png)
+
+
+3. Stay your mouse pointer 1 second to select element
+   what you want to change
+   (If you go out of the border before being selected,
+    it will be cancelled.)
+![Getting started](./img/img9.png)
+
+
+4. Choose what you want to do
+   (1 is delete, 2 is rotate, 3 is size, drag is move)
+![Getting started](./img/img10.png)
+
+
+5. If you want to quit change selected one, just press `esc` button
+![Getting started](./img/img11.png)
