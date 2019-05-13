@@ -42,10 +42,12 @@ npm run build
 
 1. After activate WEBuffet, go to any site you want to change
    (If it's working, the WEBuffet icon will appear)
+
 ![Getting started](./img/img7.png)
 
 
 2. Click anywhere on website and click `+` button
+
 ![Getting started](./img/img8.png)
 
 
@@ -53,13 +55,16 @@ npm run build
    what you want to change
    (If you go out of the border before being selected,
     it will be cancelled.)
+
 ![Getting started](./img/img9.png)
 
 
 4. Choose what you want to do
    (1 is delete, 2 is rotate, 3 is size, drag is move)
+
 ![Getting started](./img/img10.png)
 
 
 5. If you want to quit change selected one, just press `esc` button
+
 ![Getting started](./img/img11.png)
