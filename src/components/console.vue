@@ -59,7 +59,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 #wbc-console {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   position: fixed;
@@ -139,7 +139,7 @@ export default {
     .wb-title {
       text-align: left;
       font-family: inherit;
-      font-size: 40px;
+      font-size: 50px;
       font-weight: 400;
       margin: 0;
 
@@ -156,7 +156,7 @@ export default {
       margin: 0;
       margin-top: 1em;
       font-family: inherit;
-      font-size: 17px;
+      font-size: 20px;
       line-height: 1.2;
       color: #5cf5cd;
     }
@@ -166,8 +166,8 @@ export default {
     margin-top: 50px;
 
     .wb-item {
-      width: 200px;
-      height: 150px;
+      width: 300px;
+      height: 200px;
       margin: 0 50px;
       position: relative;
       box-shadow: 0 10px 50px rgba(0,0,0,0.5);

@@ -6,16 +6,6 @@ export default class Ruler {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
   }
 
-  static getTranslateXY(elm: HTMLElement) {
-    let style = window.getComputedStyle(elm)
-    let matrix = new WebKitCSSMatrix(style.webkitTransform)
-    
-    return {
-      x: matrix.m41,
-      y: matrix.m42
-    }
-  }
-
   static getScaleXY(elm: HTMLElement) {
     let matrixRegex = /matrix\(\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*)\)/
     let matches = window.getComputedStyle(elm).getPropertyValue('-webkit-transform').match(matrixRegex)
@@ -29,6 +19,22 @@ export default class Ruler {
     return {
       x: x,
       y: y 
+    }
+  }
+
+  static getTranslateXY(elm: HTMLElement) {
+    let matrixRegex = /matrix\(\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*)\)/
+    let matches = window.getComputedStyle(elm).getPropertyValue('-webkit-transform').match(matrixRegex)
+    let x = 0, y = 0
+    if (matches && matches[5]) {
+      x = Number(matches[5])
+    }
+    if (matches && matches[6]) {
+      y = Number(matches[6])
+    }
+    return {
+      x: x,
+      y: y
     }
   }
 
@@ -48,5 +54,11 @@ export default class Ruler {
       angle = 0;
     }
     return (angle < 0) ? angle +=360 : angle
+  }
+
+  // generates css transform property using
+  // input values (translateX, translateY, scale, rotate)
+  static generateCSS(tx: number, ty: number, s: number, r: number) {
+    return `translateX(${tx}px) translateY(${ty}px) scale(${s}) rotate(${r}deg)`
   }
 }
