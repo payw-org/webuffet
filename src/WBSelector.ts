@@ -57,6 +57,8 @@ export default class WBSelector {
   private startScanning() {
     this.progressBarElm.classList.remove('expand')
     clearTimeout(this.mouseMoveTimeout)
+    let time = 700
+    time = 300
     this.mouseMoveTimeout = window.setTimeout(() => {
       this.progressBarElm.classList.add('expand')
       // html2canvas(this.hoverElm, {
@@ -66,7 +68,7 @@ export default class WBSelector {
       //   let img = canvas.toDataURL('image/png')
       //   document.write('<img src="' + img + '" />')
       // })
-    }, 700)
+    }, time)
   }
 
   private setBoundingRectPos() {
