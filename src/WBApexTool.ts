@@ -145,9 +145,7 @@ export default class WBApexTool {
       this.eventCollector.attachEvent(window, eventName, this.setBoundingRectPos.bind(this))
     })
     this.eventCollector.attachEvent(window, 'keydown', this.onKeyDown.bind(this))
-    this.eventCollector.attachEvent(window, 'click', () => {
-      this.remove();
-    })
+    this.eventCollector.attachEvent(this.removeBtn, 'click', this.remove.bind(this))
   }
 
   public stop() {
