@@ -78,7 +78,8 @@ export default class WBApexTool {
       } else if (e.target.closest('#wbc-editing-boundary .scale')) {
         // scaling
         this.mode = 'scale'
-        this.initialDistance = Ruler.getDistance(e.pageX, e.pageY, this.wbSession.getFinalState().coordinate.x, this.wbSession.getFinalState().coordinate.y)
+        let rect = this.wbSession.getSelectedElement().getBoundingClientRect()
+        this.initialDistance = Ruler.getDistance(e.pageX, e.pageY, rect.left + rect.width/2, rect.top + rect.height/2)
       } else if (e.target.closest('#wbc-editing-boundary')) {
         this.mode = 'move'
       }
@@ -90,7 +91,8 @@ export default class WBApexTool {
     if (!this.mode) return
     
     if (this.mode === 'scale') {
-      let distance = Ruler.getDistance(e.pageX, e.pageY, this.wbSession.getOriginalState().coordinate.x, this.wbSession.getOriginalState().coordinate.y)
+      let rect = this.wbSession.getSelectedElement().getBoundingClientRect()
+      let distance = Ruler.getDistance(e.pageX, e.pageY, rect.left + rect.width/2, rect.top + rect.height/2)
       let newScale = distance / this.initialDistance * this.lastFinalScale
     
       let finalState = this.wbSession.getFinalState()
@@ -141,11 +143,17 @@ export default class WBApexTool {
 
   private onKeyDown(e: KeyboardEvent) {
     // Escape ApexTool with no operations
-    if(e.key == "Escape") {
+    if(e.key == 'Escape') {
       this.stop()
       document.dispatchEvent(new CustomEvent('startselector'))
-    } else {
-      return
+    }
+    if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
+      if (e.shiftKey) { // redo
+        e.preventDefault()
+      } else { // undo
+        console.log('undo something')
+        e.preventDefault()
+      }
     }
   }
 
