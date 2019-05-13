@@ -1,10 +1,11 @@
-# WEBuffet
+![Getting started](./img/webuffet_banner.png)
 
-## Introduction
-WEBuffet allows clients to manipulate any website as your tastes by deleting, moving or transforming any components within the page.
+WEBuffet is a Chrome extension that allows you to manipulate websites as your tastes by deleting, moving or transforming any component within the page.
+
 
 ## Build instructions
 You must install **Node.js** and **NPM** before following the instructions below.
+
 Node.js download : https://nodejs.org/en/
 
 1. Go to `src` directory
@@ -35,7 +36,6 @@ npm run build
 ![Getting started](./img/img3.png)
 
 4. Now activate WEBuffet and enjoy our program
-
 ![Getting started](./img/img6.png)
 
 
@@ -43,13 +43,11 @@ npm run build
 
 1. After activate WEBuffet, go to any site you want to change
    (If it's working, the WEBuffet icon will appear)
-
 ![Getting started](./img/img7.png)
 
 
 
 2. Click anywhere on website and click `+` button
-
 ![Getting started](./img/img8.png)
 
 
@@ -58,18 +56,15 @@ npm run build
    what you want to change
    (If you go out of the border before being selected,
     it will be cancelled.)
-
 ![Getting started](./img/img9.png)
 
 
 
 4. Choose what you want to do
    (1 is delete, 2 is rotate, 3 is size, drag is move)
-
 ![Getting started](./img/img10.png)
 
 
 
 5. If you want to quit change selected one, just press `esc` button
-
 ![Getting started](./img/img11.png)
