@@ -23,7 +23,11 @@ export default class WBApexTool {
   private initialDistance: number
   private initialAngle: number
   private lastFinalScale: number
-  private lastFinalRoate: number
+  private lastFinalRotate: number
+  private lastFinalTranslate: {
+    x: number,
+    y: number
+  }
 
   private eventCollector: EventCollector
 
@@ -44,6 +48,7 @@ export default class WBApexTool {
     document.addEventListener('webuffetscan', this.start.bind(this))
   }
 
+  // fires when mouse down
   private onMouseDown(e: MouseEvent) {
     if (this.wbSession.wbState !== 'apex') return
     
@@ -52,8 +57,9 @@ export default class WBApexTool {
       y: e.pageY
     }
     
-    this.lastFinalRoate = this.wbSession.getFinalState().rotate
+    this.lastFinalRotate = this.wbSession.getFinalState().rotate
     this.lastFinalScale = this.wbSession.getFinalState().scale
+    this.lastFinalTranslate = this.wbSession.getFinalState().translate
     
     if (e.target instanceof HTMLElement) {
       if (e.target.closest('#wbc-editing-boundary .rotate')) {
@@ -79,6 +85,7 @@ export default class WBApexTool {
     }
   }
 
+  // fires when mouse move
   private onMouseMove(e: MouseEvent) {
     if (!this.mode) return
     
@@ -86,8 +93,10 @@ export default class WBApexTool {
       let distance = Ruler.getDistance(e.pageX, e.pageY, this.wbSession.getOriginalState().coordinate.x, this.wbSession.getOriginalState().coordinate.y)
       let newScale = distance / this.initialDistance * this.lastFinalScale
     
-      this.wbSession.getSelectedElement().style.transform = 'rotate(' + this.lastFinalRoate + 'deg) scale(' + newScale + ')'
+      let finalState = this.wbSession.getFinalState()
+      this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(finalState.translate.x, finalState.translate.y, newScale, finalState.rotate)
     
+      // stores final scale amount to the session
       this.wbSession.setFinal({
         scale: newScale
       })
@@ -101,14 +110,26 @@ export default class WBApexTool {
       x = e.pageX - center.x
       y = e.pageY - center.y
       d = R2D * Math.atan2(y, x)
-      let newAngle = d - this.initialAngle + this.lastFinalRoate
-      this.wbSession.getSelectedElement().style.transform = 'rotate(' + newAngle + 'deg) scale(' + this.lastFinalScale + ')'
+      let newAngle = d - this.initialAngle + this.lastFinalRotate
+      let finalState = this.wbSession.getFinalState()
+      this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(finalState.translate.x, finalState.translate.y, finalState.scale, newAngle)
     
+      // stores final roate angle to the session
       this.wbSession.setFinal({
         rotate: newAngle
       })
     } else if (this.mode === 'move') {
-      
+      let dx = e.pageX - this.mouseOrigin.x, dy = e.pageY - this.mouseOrigin.y
+      let finalState = this.wbSession.getFinalState()
+      this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.lastFinalTranslate.x + dx, this.lastFinalTranslate.y + dy, finalState.scale, finalState.rotate)
+
+      // stores final translation state to the session
+      this.wbSession.setFinal({
+        translate: {
+          x: this.lastFinalTranslate.x + dx,
+          y: this.lastFinalTranslate.y + dy
+        }
+      })
     }
     
     this.setBoundingRectPos()
