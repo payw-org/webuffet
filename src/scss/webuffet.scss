@@ -120,6 +120,7 @@ body {
       &.expand {
         transform: scaleX(1);
         transition: transform 700ms linear;
+        transition: transform 300ms linear;
       }
     }
 
