@@ -11,6 +11,10 @@ interface OriginalState {
 interface FinalState {
   scale?: number
   rotate?: number,
+  translate?: {
+    x: number,
+    y: number
+  },
   coordinate?: {
     x: number,
     y: number
@@ -41,6 +45,7 @@ export default class WBSession {
     this.finalState = {
       scale: Ruler.getScaleXY(elm).x,
       rotate: Ruler.getRotationValue(elm),
+      translate: Ruler.getTranslateXY(elm),
       coordinate: {
         x: this.originalState.coordinate.x,
         y: this.originalState.coordinate.y
@@ -62,6 +67,9 @@ export default class WBSession {
     }
     if ('coordinate' in state) {
       this.finalState.coordinate = state.coordinate
+    }
+    if ('translate' in state) {
+      this.finalState.translate = state.translate
     }
   }
 
