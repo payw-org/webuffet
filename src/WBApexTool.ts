@@ -150,7 +150,7 @@ export default class WBApexTool {
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
-      if (e.shiftKey) { // redo
+      if (e.altKey) { // redo
         e.preventDefault()
         if( this.wbSession.redoLength() <= 0 ) return;
         this.wbSession.redo()

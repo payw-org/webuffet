@@ -63,7 +63,11 @@ npm run build
    (1 is delete, 2 is rotate, 3 is size, drag is move)  
 ![Getting started](./img/img10.png)
 
-
-
-5. If you want to quit change selected one, just press `esc` button  
+5. (1) If you want to 'undo' your choice, just press `ctrl + z`
 ![Getting started](./img/img11.png)
+
+5. (2) If you want to 'redo' your choice, just press `ctrl + shift + z`
+![Getting started](./img/img11.png)
+
+6. If you want to quit change selected one, just press `esc` button  
+![Getting started](./img/img13.png)
