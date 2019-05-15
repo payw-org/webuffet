@@ -26,6 +26,8 @@ export default class WBSession {
   private selectedElm: HTMLElement
   private originalState: OriginalState
   private finalState: FinalState
+  private StateStack : FinalState[] = []
+  private RedoStack : FinalState[] = []
   public wbState: 'pending'|'select'|'apex' = 'pending'
 
   constructor() {
@@ -87,5 +89,32 @@ export default class WBSession {
 
   getFinalState() {
     return this.finalState
+  }
+
+  pop() : void {
+    this.RedoStack.push(JSON.parse(JSON.stringify(this.StateStack.pop())))
+    this.finalState = JSON.parse(JSON.stringify(this.StateStack[this.StateStack.length - 1]))
+  }
+
+  push() : void {
+    let temp = JSON.parse(JSON.stringify(this.finalState))
+    this.StateStack.push(temp)
+  }
+
+  redo() : void {
+    this.finalState = JSON.parse(JSON.stringify(this.RedoStack.pop()))
+    this.StateStack.push(JSON.parse(JSON.stringify(this.finalState)))
+  }
+
+  length() : number {
+    return this.StateStack.length
+  }
+
+  redoLength() : number {
+    return this.RedoStack.length
+  }
+
+  clearRedo() : void {
+    this.RedoStack = []
   }
 }
