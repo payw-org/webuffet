@@ -113,4 +113,8 @@ export default class WBSession {
   redoLength() : number {
     return this.RedoStack.length
   }
+
+  clearRedo() : void {
+    this.RedoStack = []
+  }
 }

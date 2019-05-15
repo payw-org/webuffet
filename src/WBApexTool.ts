@@ -57,6 +57,7 @@ export default class WBApexTool {
       y: e.pageY
     }
     
+    this.wbSession.clearRedo()
     this.lastFinalRotate = this.wbSession.getFinalState().rotate
     this.lastFinalScale = this.wbSession.getFinalState().scale
     this.lastFinalTranslate = this.wbSession.getFinalState().translate
