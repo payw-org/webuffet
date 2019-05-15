@@ -91,30 +91,30 @@ export default class WBSession {
     return this.finalState
   }
 
-  pop() : void {
+  pop() : void {  // undo
     this.RedoStack.push(JSON.parse(JSON.stringify(this.StateStack.pop())))
     this.finalState = JSON.parse(JSON.stringify(this.StateStack[this.StateStack.length - 1]))
   }
 
-  push() : void {
+  push() : void {  // push state into stack
     let temp = JSON.parse(JSON.stringify(this.finalState))
     this.StateStack.push(temp)
   }
 
-  redo() : void {
+  redo() : void {  // redo
     this.finalState = JSON.parse(JSON.stringify(this.RedoStack.pop()))
     this.StateStack.push(JSON.parse(JSON.stringify(this.finalState)))
   }
 
-  length() : number {
+  length() : number {  // stack length check
     return this.StateStack.length
   }
 
-  redoLength() : number {
+  redoLength() : number {  // stack length check
     return this.RedoStack.length
   }
 
-  clearRedo() : void {
+  clearRedo() : void {  // clear Redo stack when another modification starts
     this.RedoStack = []
   }
 }
