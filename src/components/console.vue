@@ -4,21 +4,30 @@
       <div class="wb-cross cross-1"></div>
       <div class="wb-cross cross-2"></div>
     </button>
-    <div class="wb-hello">
-      <h1 class="wb-title"><span class="wb">WEBuffet</span> <span class="wb-hall">Hall</span></h1>
-      <p class="wb-current-url">{{ currentURL }}</p>
+    <div class="centered">
+      <div class="wb-hello">
+        <h1 class="wb-title"><span class="wb">WEBuffet</span> <span class="wb-hall">Hall</span></h1>
+        <p class="wb-current-url">{{ currentURL }}</p>
+        <h2 class="this-page">Cooked On This Page</h2>
+      </div>
     </div>
-    <div class="wb-current-url-cooked">
-      <div class="wb-item new" @click="startScanning">
+    <div class="wb-current-url-cooked scroll">
+      <div class="wb-item new" @click="startScanning" v-for="i in 10" :key="i">
         <div class="wb-cross cross-1"></div>
         <div class="wb-cross cross-2"></div>
       </div>
     </div>
-    <dir class="wb-other-url-cooked"></dir>
+    <div class="centered">
+      <h2 class="other-pages-title">Cooked On Other Pages</h2>
+    </div>
+    <div class="wb-other-url-cooked">
+    </div>
   </div>
 </template>
 
 <script>
+import html2canvas from 'html2canvas'
+
 export default {
   data() {
     return {
@@ -39,11 +48,24 @@ export default {
       document.dispatchEvent(new CustomEvent('consolestop'))
     },
     show() {
-      this.$el.getBoundingClientRect().height
-      this.isHidden = false
+      html2canvas(document.body, {
+        allowTaint: true,
+        useCORS: true
+      }).then(canvas => {
+        canvas.id = 'wbc-blurry-background'
+        canvas.style.position = 'absolute'
+        canvas.style.zIndex = '999999999'
+        canvas.style.filter = 'blur(20px) saturate(1.2)'
+        document.body.insertBefore(canvas, document.body.firstChild)
+
+        this.$el.getBoundingClientRect().height
+        this.isHidden = false
+      })
     },
     hide() {
       this.isHidden = true
+      let bg = document.querySelector('#wbc-blurry-background')
+      bg.parentElement.removeChild(bg)
     },
     startScanning() {
       this.hide()
@@ -68,7 +90,7 @@ export default {
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: rgba(#111, 0.9);
+  background-color: rgba(#000, 0.7);
   z-index: 2147483646;
   overflow-x: hidden;
   overflow-y: auto;
@@ -78,6 +100,35 @@ export default {
   will-change: opacity, transform;
   word-wrap: break-word;
   word-break: break-all;
+
+  ::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    height: 0px;
+    background: transparent;  /* Optional: just make scrollbar invisible */
+  }
+  /* Optional: show position indicator in red */
+  ::-webkit-scrollbar-thumb {
+      background: transparent;
+  }
+
+  .centered {
+    max-width: 1200px;
+    margin: auto;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .scroll {
+    padding-left: calc(50% - 650px);
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  h2 {
+    font-size: 25px;
+    font-weight: 400;
+  }
 
   &, & * {
     outline: none;
@@ -106,7 +157,7 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
-    background-color: #cfcfcf;
+    background-color: #757575;
     border-radius: 50px;
   
     &.cross-1 {
@@ -121,7 +172,7 @@ export default {
     position: absolute;
     right: 50px;
     top: 50px;
-    background-color: #000;
+    background-color: #fff;
     border: none;
     border-radius: 50px;
     width: 50px;
@@ -133,7 +184,6 @@ export default {
   }
 
   .wb-hello {
-    padding: 0 50px;
     margin-top: 50px;
 
     .wb-title {
@@ -160,19 +210,38 @@ export default {
       line-height: 1.2;
       color: #5cf5cd;
     }
+
+    .this-page {
+      font-size: 25px;
+      font-weight: 400;
+      margin-top: 70px;
+    }
   }
 
   .wb-current-url-cooked {
-    margin-top: 50px;
+    margin-top: 30px;
+    white-space: nowrap;
+    padding-top: 15px;
+    padding-bottom: 15px;
 
     .wb-item {
+      display: inline-block;
       width: 300px;
       height: 200px;
-      margin: 0 50px;
+      margin-right: 20px;
       position: relative;
-      box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
       will-change: transform;
+      border-radius: 10px;
+
+      &:first-child {
+        margin-left: 50px;
+      }
+
+      &:last-child {
+        margin-right: 50px;
+      }
 
       &:hover {
         transform: scale(1.05);
@@ -183,8 +252,8 @@ export default {
       }
 
       &.new {
-        background-image: linear-gradient(to bottom, #888, #444);
-        border-radius: 8px;
+        background-color: #fff;
+
         &, & * {
           cursor: pointer !important;
         }
@@ -202,6 +271,13 @@ export default {
         }
       }
     }
+  }
+
+  .other-pages-title {
+    margin-top: 70px;
+  }
+
+  .wb-other-url-cooked {
   }
 }
 </style>
