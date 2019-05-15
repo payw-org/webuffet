@@ -157,7 +157,6 @@ export default class WBApexTool {
         this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
         this.setBoundingRectPos()
       } else { // undo
-        console.log('undo something')
         e.preventDefault()
         if( this.wbSession.length() <= 1 ) return;
         this.wbSession.pop()
@@ -228,6 +227,7 @@ export default class WBApexTool {
     // Stop ApexTool and go back to Selector after remove element
     this.wbSession.getSelectedElement().style.display = 'none'
     this.stop()
+    chrome.storage.sync.set({ "id" : this.apexToolElm.id , "isDeleted" : true }  , function() {})
     document.dispatchEvent(new CustomEvent('startselector'))
   }
 }
