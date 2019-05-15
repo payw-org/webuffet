@@ -60,7 +60,7 @@ export default class WBApexTool {
     this.lastFinalRotate = this.wbSession.getFinalState().rotate
     this.lastFinalScale = this.wbSession.getFinalState().scale
     this.lastFinalTranslate = this.wbSession.getFinalState().translate
-    
+
     if (e.target instanceof HTMLElement) {
       if (e.target.closest('#wbc-editing-boundary .rotate')) {
         // rotation
@@ -139,6 +139,7 @@ export default class WBApexTool {
 
   private onMouseUp(e: MouseEvent) {
     if (this.mode) this.mode = undefined
+    this.wbSession.push()
   }
 
   private onKeyDown(e: KeyboardEvent) {
@@ -150,9 +151,17 @@ export default class WBApexTool {
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
       if (e.shiftKey) { // redo
         e.preventDefault()
+        if( this.wbSession.redoLength() <= 0 ) return;
+        this.wbSession.redo()
+        this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
+        this.setBoundingRectPos()
       } else { // undo
         console.log('undo something')
         e.preventDefault()
+        if( this.wbSession.length() <= 1 ) return;
+        this.wbSession.pop()
+        this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
+        this.setBoundingRectPos()
       }
     }
   }
@@ -175,6 +184,7 @@ export default class WBApexTool {
     })
     this.eventCollector.attachEvent(window, 'keydown', this.onKeyDown.bind(this))
     this.eventCollector.attachEvent(this.removeBtn, 'click', this.remove.bind(this))
+    this.wbSession.push()
   }
 
   public stop() {
