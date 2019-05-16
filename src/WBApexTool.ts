@@ -237,7 +237,6 @@ export default class WBApexTool {
   private storage(display : boolean) {
     this.strElem.push(
       {
-        //id : this.wbSession.getSelectedElement().tagName,
         name:
           {
             id: this.wbSession.getSelectedElement().id,
