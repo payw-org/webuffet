@@ -141,30 +141,13 @@ export default class WBApexTool {
   private onMouseUp(e: MouseEvent) {
     if (this.mode) this.mode = undefined
     this.wbSession.push()
-    chrome.storage.local.set( 
-      { foo : [
-          {
-            id : this.wbSession.getSelectedElement().tagName,
-            style :
-              {
-                isDeleted : false,
-                transform : JSON.stringify(this.wbSession.getSelectedElement().style.transform),
-                rotate : JSON.stringify(this.wbSession.getSelectedElement().style.rotate),
-                scale : JSON.stringify(this.wbSession.getSelectedElement().style.scale)
-              }
-          }
-        ] 
-      } )
-    chrome.storage.local.get( ['foo'], function(items) {
-      console.log(JSON.stringify(items))
-    } )
+    this.storage()
   }
 
   private onKeyDown(e: KeyboardEvent) {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
-      chrome.storage.sync.set({ "id" : this.wbSession.getSelectedElement().id , "style" : this.wbSession.getFinalState() }  , function() {})
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
@@ -245,13 +228,19 @@ export default class WBApexTool {
     // Stop ApexTool and go back to Selector after remove element
     this.wbSession.getSelectedElement().style.display = 'none'
     this.stop()
+    this.storage()
+
+    document.dispatchEvent(new CustomEvent('startselector'))
+  }
+
+  private storage() {
     chrome.storage.local.set( 
       { foo : [
           {
             id : this.wbSession.getSelectedElement().tagName,
             style :
               {
-                isDeleted : true,
+                isDeleted : false,
                 transform : JSON.stringify(this.wbSession.getSelectedElement().style.transform),
                 rotate : JSON.stringify(this.wbSession.getSelectedElement().style.rotate),
                 scale : JSON.stringify(this.wbSession.getSelectedElement().style.scale)
@@ -262,7 +251,5 @@ export default class WBApexTool {
     chrome.storage.local.get( ['foo'], function(items) {
       console.log(JSON.stringify(items))
     } )
-
-    document.dispatchEvent(new CustomEvent('startselector'))
   }
 }
