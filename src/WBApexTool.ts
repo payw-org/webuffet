@@ -236,7 +236,13 @@ export default class WBApexTool {
 
   private storage(display : boolean) {
     this.strElem.push(
+      /**
+       * Push new element to WBApexTool.strElem => Object[]
+       * All array of strElem will be stored in chrome.storage.local
+       * It will be loaded before load the page
+       */
       {
+        url: document.URL,
         name:
           {
             id: this.wbSession.getSelectedElement().id,
@@ -253,9 +259,16 @@ export default class WBApexTool {
           }
       }
     )
+
+    /**
+     *  Save strElem to chrome.storage.local 
+     *  NOTE : Now, your saved elements are removed when you reload the page (because of chrome.storage.local.clear() in main.ts)
+     */
     chrome.storage.local.set({ myCustom : this.strElem }, null)
-    chrome.storage.local.get('myCustom', function(items) {
-      console.log(JSON.stringify(items))
-    } )
+
+    /* Code below will show you saved elements in chrome.storage.sync */
+    chrome.storage.local.get(['myCustom'], function(items) {
+      console.log(items)
+    })
   }
 }
