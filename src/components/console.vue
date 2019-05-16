@@ -17,6 +17,13 @@
         <div class="wb-cross cross-2"></div>
       </div>
     </div>
+    <h2 class="wb-setting-letter">Setting Time</h2>
+    <div class="wb-for-up" @click="increaseTime">
+     <div class="wb-arrow up"></div>
+    </div>
+    <div class="wb-for-down" @click="decreaseTime">
+       <div class="wb-arrow down"></div>
+    </div>
     <div class="centered">
       <h2 class="other-pages-title">Cooked On Other Pages</h2>
     </div>
@@ -70,6 +77,12 @@ export default {
     startScanning() {
       this.hide()
       document.dispatchEvent(new CustomEvent('startselector'))
+    },
+    increaseTime(){
+      document.dispatchEvent(new CustomEvent('increasetime'))
+    },
+    decreaseTime(){
+      document.dispatchEvent(new CustomEvent('decreasetime'))
     }
   },
   mounted() {
@@ -166,6 +179,72 @@ export default {
     &.cross-2 {
       transform: translateX(-50%) translateY(-50%) rotate(-45deg);
     }
+  }
+
+  .wb-for-up {
+    position: absolute;
+    top: 50px;
+    right : 130px;
+    background-color:#fff;
+    border: none;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    &:hover {
+        transform: scale(1.05);
+      }
+
+    &:active {
+        transform: scale(0.95);
+     }
+    &, & * {
+         cursor: pointer !important;
+      }
+  
+  }
+  .wb-for-down {
+    position: absolute;
+    top: 50px;
+    right : 185px;
+    background-color:#fff;
+    border: none;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    &:hover {
+        transform: scale(1.05);
+      }
+
+    &:active {
+        transform: scale(0.95);
+    }
+    &, & * {
+          cursor: pointer !important;
+      }
+  
+  }
+
+  .wb-arrow{
+    position : absoulte;
+    border: solid black;
+    border-width: 0 6px 6px 0;
+    display: inline-block;
+    padding: 6px;
+    
+    &.up {
+      transform: translateX(90%) translateY(100%) rotate(-135deg);
+    }
+    &.down {
+      transform: translateX(90%) translateY(90%) rotate(45deg);
+    }
+  }
+
+  .wb-setting-letter{
+    position : absolute;
+    right : 250px;
+    top : 60px;
+    font-size: 25px;
+    font-weight: 400;
   }
 
   .wb-close {
