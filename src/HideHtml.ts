@@ -8,22 +8,21 @@ html.style.display = 'none'
  * Attach Style Sheet from read elements
  */
 
-chrome.storage.sync.get(['myCustom'], function(items) {
-    /**
-     * Here, Attach Style Sheet from object in items
-     * Get URL first, check the URL matches with document.URL
-     * If matches, find elements in document with name and generate CSS for that element with style
-     */
-    if(items.myCustom[0] === []) {
+let objects : any [] = []
 
-    } else {
-        for (let idx in items.myCustom) {
-            let itm = items.myCustom[idx]
-            let elem = document.getElementById(itm.name.id)
-            console.log(elem)
-            elem.style.transform = Ruler.generateCSS(itm.style.translatex, itm.style.translatey, itm.style.scale, itm.style.rotate)
-        }
+chrome.storage.sync.get(['myCustom'], function(items) {
+    for(let key in items.myCustom) {
+        console.log(items.myCustom[key].name)
+        objects.push(JSON.parse(JSON.stringify(items.myCustom[key])))
     }
 })
+
+console.log(objects[0])
+let job = function() {
+    for (let idx in objects) {
+        let item = objects[idx]
+        document.getElementById(item.name.id).style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
+    }
+}
 
 html.style.display = ''
