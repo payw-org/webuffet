@@ -36,7 +36,3 @@ document.addEventListener('consolestop', e => {
   window.addEventListener('mouseup', clear)
 })
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.clear()
-  chrome.storage.sync.set({myCustom : []}, null)
-})
