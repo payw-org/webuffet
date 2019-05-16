@@ -264,10 +264,12 @@ export default class WBApexTool {
      *  Save strElem to chrome.storage.local 
      *  NOTE : Now, your saved elements are removed when you reload the page (because of chrome.storage.local.clear() in main.ts)
      */
-    chrome.storage.local.set({ myCustom : this.strElem }, null)
+    chrome.storage.sync.set({ myCustom : this.strElem }, null)
 
-    /* Code below will show you saved elements in chrome.storage.sync */
-    chrome.storage.local.get(['myCustom'], function(items) {
+    /** Code below will show you saved elements in chrome.storage.sync 
+     *  TODO: Delete this code after complete load feature
+     */
+    chrome.storage.sync.get(['myCustom'], function(items) {
       console.log(items)
     })
   }

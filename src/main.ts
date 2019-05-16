@@ -36,14 +36,7 @@ document.addEventListener('consolestop', e => {
   window.addEventListener('mouseup', clear)
 })
 
-// chrome.storage.sync.set({ 'test': 'hello' }, function(){
-//   //  A data saved callback omg so fancy
-// });
-
-chrome.storage.sync.clear()
-chrome.storage.local.clear()
-
-chrome.storage.sync.get(['test'], function(items){
-  //  items = [ { "yourBody": "myBody" } ]
-  console.log(items)
-});
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.clear()
+  chrome.storage.sync.set({myCustom : []}, null)
+})
