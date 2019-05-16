@@ -146,7 +146,13 @@ export default class WBApexTool {
           {
             id : this.wbSession.getSelectedElement().tagName,
             isDeleted : this.wbSession.getSelectedElement().style.display,
-            style : this.wbSession.getSelectedElement().style
+            style : [
+              {
+                transform : JSON.stringify(this.wbSession.getSelectedElement().style.transform),
+                rotate : JSON.stringify(this.wbSession.getSelectedElement().style.rotate),
+                scale : JSON.stringify(this.wbSession.getSelectedElement().style.scale)
+              }
+            ]
           }
         ] 
       } )
