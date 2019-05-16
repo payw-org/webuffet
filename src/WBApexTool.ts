@@ -47,19 +47,16 @@ export default class WBApexTool {
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
     // Save changes done before
-    chrome.storage.sync.set({myCustom : this.strElem}, function() {
-      this.strElem = []
-      chrome.storage.sync.get(['myCustom'], function(objects) {
-        if(objects.myCustom[0] === {}) {
-          console.log('empty')
-        } else {
-          for(let key in objects.myCustom) {
-            this.strElem.push(objects.myCustom[key])
-          }
+    chrome.storage.sync.get(['myCustom'], items  => {
+      if(items.myCustom[0] === {}) {
+        
+      } else {
+        for(let key in items.myCustom) {
+          this.strElem.push(items.myCustom[key])
         }
-      })
-      console.log(this.strElem)
+      }
     })
+
     // Add apex tool triggering event listener
     document.addEventListener('webuffetscan', this.start.bind(this))
   }
@@ -253,8 +250,8 @@ export default class WBApexTool {
     this.strElem.push(
       /**
        * Push new element to WBApexTool.strElem : any[]
-       * All array of strElem will be stored in chrome.storage.local
-       * It will be loaded before load the page
+       * All array of strElem will be stored in chrome.storage.sync
+       * It will be loaded after window.onload
        */
       {
         url: document.URL,
@@ -276,8 +273,7 @@ export default class WBApexTool {
     )
 
     /**
-     *  Save strElem to chrome.storage.local 
-     *  NOTE : Now, your saved elements are removed when you reload the page (because of chrome.storage.local.clear() in main.ts)
+     *  Save strElem to chrome.storage.sync
      */
     chrome.storage.sync.set({ myCustom : this.strElem }, null)
   }
