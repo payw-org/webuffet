@@ -23,8 +23,8 @@
 		},
 		{
 			"matches": ["*://*/*"],
-			"js": ["HideHtml.js"],
-			"run_at": "document_start"
+			"js": ["build/HideHtml.built.js"],
+			"run_at": "document_end"
 		}
 	],
 	"page_action": {
