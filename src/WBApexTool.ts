@@ -141,12 +141,19 @@ export default class WBApexTool {
   private onMouseUp(e: MouseEvent) {
     if (this.mode) this.mode = undefined
     this.wbSession.push()
+    let key = this.wbSession.getSelectedElement().tagName
+    console.log("%s", key)
+    chrome.storage.local.set( { key : this.wbSession.getSelectedElement().style } )
+    chrome.storage.local.get([key], function(items) {
+      console.log("%s", items.key)
+    })
   }
 
   private onKeyDown(e: KeyboardEvent) {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
+      chrome.storage.sync.set({ "id" : this.wbSession.getSelectedElement().id , "style" : this.wbSession.getFinalState() }  , function() {})
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
@@ -227,7 +234,12 @@ export default class WBApexTool {
     // Stop ApexTool and go back to Selector after remove element
     this.wbSession.getSelectedElement().style.display = 'none'
     this.stop()
-    chrome.storage.sync.set({ "id" : this.apexToolElm.id , "isDeleted" : true }  , function() {})
+    console.log("%s", this.wbSession.getSelectedElement().id)
+    chrome.storage.sync.set( {0 : JSON.parse(JSON.stringify(this.wbSession.getSelectedElement()))} )
+    chrome.storage.sync.get(['0'], function(items) {
+      console.log("%s", items.id)
+    })
+
     document.dispatchEvent(new CustomEvent('startselector'))
   }
 }
