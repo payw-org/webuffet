@@ -13,7 +13,7 @@ export default class WBApexTool {
   private scaleBtn: HTMLElement
   private moreBtn: HTMLElement
   private readonly wbSession: WBSession
-  private strElem: Object[] = []
+  private strElem: any[] = []
 
   private mode: undefined|'move'|'rotate'|'scale' = undefined
   private mouseOrigin: {
@@ -47,6 +47,13 @@ export default class WBApexTool {
 
     // Add apex tool triggering event listener
     document.addEventListener('webuffetscan', this.start.bind(this))
+
+    chrome.storage.sync.get(['myCustom'], function(items) {
+      for(let idx in items.myCustom) {
+        console.log(items.myCustom[idx])
+        this.strElem.push(JSON.parse(JSON.stringify(items.myCustom[idx])))
+      }
+    })
   }
 
   // fires when mouse down
@@ -246,8 +253,8 @@ export default class WBApexTool {
         name:
           {
             id: this.wbSession.getSelectedElement().id,
-            class: this.wbSession.getSelectedElement().className,
-            tag: this.wbSession.getSelectedElement().tagName
+            tName: this.wbSession.getSelectedElement().tagName,
+            tIndex: Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
           },
         style :
           {

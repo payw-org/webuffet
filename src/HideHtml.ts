@@ -18,7 +18,20 @@ chrome.storage.sync.get(['myCustom'], function(items) {
     else {
         for(let key in items.myCustom) {
             let item = items.myCustom[key]
-            document.getElementById(item.name.id).style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
+            if(item.name.id != "") {
+                if(item.style.isDeleted == true) {
+                    document.getElementById(item.name.id).style.display = 'none'
+                } else {
+                    document.getElementById(item.name.id).style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
+                }   
+            } else {
+                let element = document.getElementsByTagName(item.name.tName).item(item.name.tIndex)
+                if(item.style.isDeleted == true) {
+                    element.style.display = 'none'
+                } else {
+                    element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
+                }
+            }
         }
     }
 })
