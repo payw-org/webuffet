@@ -252,8 +252,8 @@ export default class WBApexTool {
         style :
           {
             isDeleted : display,
-            transformx : this.wbSession.getFinalState().translate.x,
-            transformy : this.wbSession.getFinalState().translate.y,
+            translatex : this.wbSession.getFinalState().translate.x,
+            translatey : this.wbSession.getFinalState().translate.y,
             rotate : this.wbSession.getFinalState().rotate,
             scale : this.wbSession.getFinalState().scale
           }

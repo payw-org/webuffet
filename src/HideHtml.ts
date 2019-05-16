@@ -1,4 +1,4 @@
-import Ruler from "./build/webuffet.built.js"
+import Ruler from "./Ruler"
 
 let html = document.querySelector('html')
 html.style.display = 'none'
@@ -15,13 +15,13 @@ chrome.storage.sync.get(['myCustom'], function(items) {
      * If matches, find elements in document with name and generate CSS for that element with style
      */
     if(items.myCustom[0] === []) {
-        return
+
     } else {
-        for (idx in items.myCustom) {
+        for (let idx in items.myCustom) {
             let itm = items.myCustom[idx]
-            if(!itm.name.id) {
-                document.getElementById(itm.name.id).style.transform = Ruler.generateCSS(itm.style.translatex, itm.style.translatey, itm.style.scale, itm.style.rotate)
-            }
+            let id = itm.name.id
+            console.log(id)
+            document.getElementById(id).style.transform = Ruler.generateCSS(itm.style.translatex, itm.style.translatey, itm.style.scale, itm.style.rotate)
         }
     }
 })
