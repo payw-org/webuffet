@@ -145,14 +145,13 @@ export default class WBApexTool {
       { foo : [
           {
             id : this.wbSession.getSelectedElement().tagName,
-            isDeleted : this.wbSession.getSelectedElement().style.display,
-            style : [
+            style :
               {
+                isDeleted : false,
                 transform : JSON.stringify(this.wbSession.getSelectedElement().style.transform),
                 rotate : JSON.stringify(this.wbSession.getSelectedElement().style.rotate),
                 scale : JSON.stringify(this.wbSession.getSelectedElement().style.scale)
               }
-            ]
           }
         ] 
       } )
@@ -246,11 +245,23 @@ export default class WBApexTool {
     // Stop ApexTool and go back to Selector after remove element
     this.wbSession.getSelectedElement().style.display = 'none'
     this.stop()
-    console.log("%s", this.wbSession.getSelectedElement().id)
-    chrome.storage.sync.set( {0 : JSON.parse(JSON.stringify(this.wbSession.getSelectedElement()))} )
-    chrome.storage.sync.get(['0'], function(items) {
-      console.log("%s", items.id)
-    })
+    chrome.storage.local.set( 
+      { foo : [
+          {
+            id : this.wbSession.getSelectedElement().tagName,
+            style :
+              {
+                isDeleted : true,
+                transform : JSON.stringify(this.wbSession.getSelectedElement().style.transform),
+                rotate : JSON.stringify(this.wbSession.getSelectedElement().style.rotate),
+                scale : JSON.stringify(this.wbSession.getSelectedElement().style.scale)
+              }
+          }
+        ] 
+      } )
+    chrome.storage.local.get( ['foo'], function(items) {
+      console.log(JSON.stringify(items))
+    } )
 
     document.dispatchEvent(new CustomEvent('startselector'))
   }
