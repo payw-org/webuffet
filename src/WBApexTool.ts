@@ -141,12 +141,18 @@ export default class WBApexTool {
   private onMouseUp(e: MouseEvent) {
     if (this.mode) this.mode = undefined
     this.wbSession.push()
-    let key = this.wbSession.getSelectedElement().tagName
-    console.log("%s", key)
-    chrome.storage.local.set( { key : this.wbSession.getSelectedElement().style } )
-    chrome.storage.local.get([key], function(items) {
-      console.log("%s", items.key)
-    })
+    chrome.storage.local.set( 
+      { foo : [
+          {
+            id : this.wbSession.getSelectedElement().tagName,
+            isDeleted : this.wbSession.getSelectedElement().style.display,
+            style : this.wbSession.getSelectedElement().style
+          }
+        ] 
+      } )
+    chrome.storage.local.get( ['foo'], function(items) {
+      console.log(JSON.stringify(items))
+    } )
   }
 
   private onKeyDown(e: KeyboardEvent) {
