@@ -13,7 +13,7 @@ export default class WBApexTool {
   private scaleBtn: HTMLElement
   private moreBtn: HTMLElement
   private readonly wbSession: WBSession
-  private strElem: any[] = []
+  private strElem: any[]
 
   private mode: undefined|'move'|'rotate'|'scale' = undefined
   private mouseOrigin: {
@@ -35,6 +35,7 @@ export default class WBApexTool {
   constructor(apexToolElm: HTMLElement, wbSession: WBSession) {
     this.apexToolElm = apexToolElm
     this.wbSession = wbSession
+    this.strElem = []
 
     // Create event collector instance
     this.eventCollector = new EventCollector()
@@ -45,15 +46,22 @@ export default class WBApexTool {
     this.scaleBtn = this.apexToolElm.querySelector('.scale')
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
+    // Save changes done before
+    chrome.storage.sync.set({myCustom : this.strElem}, function() {
+      this.strElem = []
+      chrome.storage.sync.get(['myCustom'], function(objects) {
+        if(objects.myCustom[0] === {}) {
+          console.log('empty')
+        } else {
+          for(let key in objects.myCustom) {
+            this.strElem.push(objects.myCustom[key])
+          }
+        }
+      })
+      console.log(this.strElem)
+    })
     // Add apex tool triggering event listener
     document.addEventListener('webuffetscan', this.start.bind(this))
-
-    chrome.storage.sync.get(['myCustom'], function(items) {
-      for(let idx in items.myCustom) {
-        console.log(items.myCustom[idx])
-        this.strElem.push(JSON.parse(JSON.stringify(items.myCustom[idx])))
-      }
-    })
   }
 
   // fires when mouse down
@@ -244,7 +252,7 @@ export default class WBApexTool {
   private storage(display : boolean) {
     this.strElem.push(
       /**
-       * Push new element to WBApexTool.strElem => Object[]
+       * Push new element to WBApexTool.strElem : any[]
        * All array of strElem will be stored in chrome.storage.local
        * It will be loaded before load the page
        */
@@ -272,12 +280,6 @@ export default class WBApexTool {
      *  NOTE : Now, your saved elements are removed when you reload the page (because of chrome.storage.local.clear() in main.ts)
      */
     chrome.storage.sync.set({ myCustom : this.strElem }, null)
-
-    /** Code below will show you saved elements in chrome.storage.sync 
-     *  TODO: Delete this code after complete load feature
-     */
-    chrome.storage.sync.get(['myCustom'], function(items) {
-      console.log(items)
-    })
   }
+
 }
