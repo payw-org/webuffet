@@ -41,6 +41,7 @@ document.addEventListener('consolestop', e => {
 // });
 
 chrome.storage.sync.clear()
+chrome.storage.local.clear()
 
 chrome.storage.sync.get(['test'], function(items){
   //  items = [ { "yourBody": "myBody" } ]

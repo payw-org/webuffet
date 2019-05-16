@@ -235,7 +235,7 @@ export default class WBApexTool {
 
   private storage(display : boolean) {
     chrome.storage.local.set( 
-      { myCustom : 
+      { myCustom : [
           {
             id : this.wbSession.getSelectedElement().tagName,
             style :
@@ -246,9 +246,10 @@ export default class WBApexTool {
                 rotate : this.wbSession.getFinalState().rotate,
                 scale : this.wbSession.getFinalState().scale
               }
-          } 
+          }
+        ] 
       } )
-    chrome.storage.local.get( ['myCustom'], function(items) {
+    chrome.storage.local.get('myCustom', function(items) {
       console.log(JSON.stringify(items))
     } )
   }
