@@ -19,9 +19,9 @@ chrome.storage.sync.get(['myCustom'], function(items) {
     } else {
         for (let idx in items.myCustom) {
             let itm = items.myCustom[idx]
-            let id = itm.name.id
-            console.log(id)
-            document.getElementById(id).style.transform = Ruler.generateCSS(itm.style.translatex, itm.style.translatey, itm.style.scale, itm.style.rotate)
+            let elem = document.getElementById(itm.name.id)
+            console.log(elem)
+            elem.style.transform = Ruler.generateCSS(itm.style.translatex, itm.style.translatey, itm.style.scale, itm.style.rotate)
         }
     }
 })
