@@ -10,7 +10,7 @@ export default class WBSelector {
   private mouseMoveTimeout: number
   private triggerTimeout: number
   private eventCollector: EventCollector
-  private bartime = 700
+  private time = 300
 
   constructor(selectorElm: HTMLElement, wbSession: WBSession) {
     this.selectorElm = selectorElm
@@ -20,11 +20,11 @@ export default class WBSelector {
 
     document.addEventListener('startselector', this.start.bind(this))
     document.addEventListener('increasetime', ((event: CustomEvent) => {
-      this.bartime += 100
+      this.time += 100
     }) as EventListener);
     document.addEventListener('decreasetime', ((event: CustomEvent) => {
-      if(this.bartime>300){
-        this.bartime -= 100
+      if(this.time>100){
+        this.time -= 100
       }
     }) as EventListener);
   }
@@ -65,11 +65,8 @@ export default class WBSelector {
 
   private startScanning() {
     this.progressBarElm.classList.remove('expand')
-    this.progressBarElm.style.transition = 'transform 20ms linear'
     clearTimeout(this.mouseMoveTimeout)
-    let time=1
     this.mouseMoveTimeout = window.setTimeout(() => {
-      this.progressBarElm.style.transition = 'transform '+this.bartime+'ms linear'
       this.progressBarElm.classList.add('expand')
       // html2canvas(this.hoverElm, {
       //   useCORS: true,
@@ -78,7 +75,7 @@ export default class WBSelector {
       //   let img = canvas.toDataURL('image/png')
       //   document.write('<img src="' + img + '" />')
       // })
-    }, time)
+    }, this.time)
   }
 
 
@@ -99,7 +96,6 @@ export default class WBSelector {
     this.selectorElm.classList.remove('wb-hidden')
     this.wbSession.wbState = 'select'
     this.attachEventListeners()
-    this.progressBarElm.classList.remove('expand')
   }
 
   private stop() {

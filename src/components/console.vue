@@ -184,7 +184,7 @@ export default {
   .wb-for-up {
     position: absolute;
     top: 50px;
-    right : 130px;
+    right : 185px;
     background-color:#fff;
     border: none;
     border-radius: 50px;
@@ -205,7 +205,7 @@ export default {
   .wb-for-down {
     position: absolute;
     top: 50px;
-    right : 185px;
+    right : 130px;
     background-color:#fff;
     border: none;
     border-radius: 50px;
@@ -232,16 +232,16 @@ export default {
     padding: 6px;
     
     &.up {
-      transform: translateX(90%) translateY(100%) rotate(-135deg);
+      transform: translateX(90%) translateY(105%) rotate(-135deg);
     }
     &.down {
-      transform: translateX(90%) translateY(90%) rotate(45deg);
+      transform: translateX(90%) translateY(75%) rotate(45deg);
     }
   }
 
   .wb-setting-letter{
     position : absolute;
-    right : 250px;
+    right : 245px;
     top : 60px;
     font-size: 25px;
     font-weight: 400;
