@@ -1,7 +1,7 @@
 import Ruler from "./Ruler"
 
 let body = document.querySelector('html')
-body.style.display = 'hidden'
+body.style.visibility = 'hidden'
 
 /**
  * Codes read from chrome.storage.sync
@@ -36,5 +36,5 @@ window.onload = () => {
             }
         }
     })
-    body.style.display = ''
+    body.style.visibility = 'visible'
 }
