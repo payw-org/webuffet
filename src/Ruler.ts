@@ -7,6 +7,18 @@ export default class Ruler {
   }
 
   static getScaleXY(elm: HTMLElement) {
+    // if the transform property has scale value
+    // return this value
+    let t = elm.style.transform
+    let s = t.match(/scale\((.*?)\)/)[0].replace( /^\D+/g, '').replace(/\)/g, '')
+
+    if (s.length > 0) {
+      return {
+        x: Number(s),
+        y: Number(s)
+      }
+    }
+
     let matrixRegex = /matrix\(\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*),\s*(-?\d*\.?\d*)\)/
     let matches = window.getComputedStyle(elm).getPropertyValue('-webkit-transform').match(matrixRegex)
     let x = 1, y = 1
