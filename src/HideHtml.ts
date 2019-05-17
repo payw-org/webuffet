@@ -8,6 +8,7 @@ body.style.display = 'hidden'
  * Attach Style Sheet from read elements
  */
 window.onload = () => {
+    let body = document.querySelector('html')
     chrome.storage.sync.get(['myCustom'], function(items) {
         /**
         * Here, Attach Style Sheet from object in items
@@ -35,5 +36,5 @@ window.onload = () => {
             }
         }
     })
+    body.style.display = ''
 }
-body.style.display = 'visible'
