@@ -24,7 +24,7 @@
 		{
 			"matches": ["*://*/*"],
 			"js": ["build/HideHtml.built.js"],
-			"run_at": "document_end"
+			"run_at": "document_start"
 		}
 	],
 	"page_action": {
