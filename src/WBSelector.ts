@@ -10,6 +10,7 @@ export default class WBSelector {
   private mouseMoveTimeout: number
   private triggerTimeout: number
   private eventCollector: EventCollector
+  private time = 300
 
   constructor(selectorElm: HTMLElement, wbSession: WBSession) {
     this.selectorElm = selectorElm
@@ -18,6 +19,14 @@ export default class WBSelector {
     this.eventCollector = new EventCollector()
 
     document.addEventListener('startselector', this.start.bind(this))
+    document.addEventListener('increasetime', ((event: CustomEvent) => {
+      this.time += 100
+    }) as EventListener);
+    document.addEventListener('decreasetime', ((event: CustomEvent) => {
+      if(this.time>100){
+        this.time -= 100
+      }
+    }) as EventListener);
   }
 
   private attachEventListeners() {
@@ -57,8 +66,6 @@ export default class WBSelector {
   private startScanning() {
     this.progressBarElm.classList.remove('expand')
     clearTimeout(this.mouseMoveTimeout)
-    let time = 700
-    time = 300
     this.mouseMoveTimeout = window.setTimeout(() => {
       this.progressBarElm.classList.add('expand')
       // html2canvas(this.hoverElm, {
@@ -68,8 +75,10 @@ export default class WBSelector {
       //   let img = canvas.toDataURL('image/png')
       //   document.write('<img src="' + img + '" />')
       // })
-    }, time)
+    }, this.time)
   }
+
+
 
   private setBoundingRectPos() {
     const rect = this.hoverElm.getBoundingClientRect()

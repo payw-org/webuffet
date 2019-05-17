@@ -116,10 +116,9 @@ body {
       transform-origin: 0 0;
       transform: scaleX(0);
       will-change: transform;
-
+      
       &.expand {
         transform: scaleX(1);
-        transition: transform 700ms linear;
         transition: transform 300ms linear;
       }
     }
