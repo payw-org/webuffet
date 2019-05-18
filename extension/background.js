@@ -8,4 +8,7 @@ chrome.runtime.onInstalled.addListener(function() {
 					actions: [new chrome.declarativeContent.ShowPageAction()]
 		}]);
 	});
+
+	chrome.storage.sync.clear();
+	chrome.storage.sync.set({myCustom : []}, null);
 });

@@ -3,7 +3,8 @@ const WebpackMessages = require('webpack-messages')
 
 module.exports = {
 	entry: {
-		webuffet: ['./src/main']
+		webuffet: ['./src/main'],
+		HideHtml: ['./src/HideHtml']
 	},
 
 	mode: 'development',

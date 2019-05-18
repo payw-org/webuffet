@@ -13,6 +13,7 @@ export default class WBApexTool {
   private scaleBtn: HTMLElement
   private moreBtn: HTMLElement
   private readonly wbSession: WBSession
+  private strElem: any[]
 
   private mode: undefined|'move'|'rotate'|'scale' = undefined
   private mouseOrigin: {
@@ -34,6 +35,7 @@ export default class WBApexTool {
   constructor(apexToolElm: HTMLElement, wbSession: WBSession) {
     this.apexToolElm = apexToolElm
     this.wbSession = wbSession
+    this.strElem = []
 
     // Create event collector instance
     this.eventCollector = new EventCollector()
@@ -43,6 +45,17 @@ export default class WBApexTool {
     this.rotateBtn = this.apexToolElm.querySelector('.rotate')
     this.scaleBtn = this.apexToolElm.querySelector('.scale')
     this.moreBtn = this.apexToolElm.querySelector('.more')
+
+    // Save changes done before
+    chrome.storage.sync.get(['myCustom'], items  => {
+      if(items.myCustom[0] === {}) {
+        
+      } else {
+        for(let key in items.myCustom) {
+          this.strElem.push(items.myCustom[key])
+        }
+      }
+    })
 
     // Add apex tool triggering event listener
     document.addEventListener('webuffetscan', this.start.bind(this))
@@ -147,6 +160,7 @@ export default class WBApexTool {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
+      this.storage(false)
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
@@ -227,7 +241,41 @@ export default class WBApexTool {
     // Stop ApexTool and go back to Selector after remove element
     this.wbSession.getSelectedElement().style.display = 'none'
     this.stop()
-    chrome.storage.sync.set({ "id" : this.apexToolElm.id , "isDeleted" : true }  , function() {})
+    this.storage(true)
+
     document.dispatchEvent(new CustomEvent('startselector'))
   }
+
+  private storage(display : boolean) {
+    this.strElem.push(
+      /**
+       * Push new element to WBApexTool.strElem : any[]
+       * All array of strElem will be stored in chrome.storage.sync
+       * It will be loaded after window.onload
+       */
+      {
+        url: document.URL,
+        name:
+          {
+            id: this.wbSession.getSelectedElement().id,
+            tName: this.wbSession.getSelectedElement().tagName,
+            tIndex: Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
+          },
+        style :
+          {
+            isDeleted : display,
+            translatex : this.wbSession.getFinalState().translate.x,
+            translatey : this.wbSession.getFinalState().translate.y,
+            rotate : this.wbSession.getFinalState().rotate,
+            scale : this.wbSession.getFinalState().scale
+          }
+      }
+    )
+
+    /**
+     *  Save strElem to chrome.storage.sync
+     */
+    chrome.storage.sync.set({ myCustom : this.strElem }, null)
+  }
+
 }
