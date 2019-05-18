@@ -9,7 +9,9 @@
 		"activeTab",
 		"tabs",
 		"declarativeContent",
-		"storage"
+		"storage",
+		"identity",
+    	"identity.email"
 	],
 	"background": {
 		"scripts": ["background.js"],
