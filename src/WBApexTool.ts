@@ -258,6 +258,8 @@ export default class WBApexTool {
         name:
           {
             id: this.wbSession.getSelectedElement().id,
+            cName: this.wbSession.getSelectedElement().className,
+            cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
             tName: this.wbSession.getSelectedElement().tagName,
             tIndex: Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
           },
