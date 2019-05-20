@@ -25,18 +25,11 @@ window.onload = () => {
                     } else {
                         document.getElementById(item.name.id).style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }   
-                }  else if(item.name.cName != "") {
-                    let element : any = document.getElementsByClassName(item.name.cName).item(Number(item.name.cIndex))
-                    if(item.style.isDeleted == true) {
-                        element.style.display = 'none'
-                    } else {
-                        element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
-                    }
                 } else {
                     let element : any = document.getElementsByTagName(item.name.tName).item(item.name.tIndex)
-                    console.log(element)
+                    console.log(document.getElementsByTagName(item.name.tName))
                     if(item.style.isDeleted == true) {
-                        element.item(0).style.display = 'none'
+                        element.style.display = 'none'
                     } else {
                         element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }
