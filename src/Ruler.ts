@@ -10,9 +10,9 @@ export default class Ruler {
     // if the transform property has scale value
     // return this value
     let t = elm.style.transform
-    let s = t.match(/scale\((.*?)\)/)[0].replace( /^\D+/g, '').replace(/\)/g, '')
-
-    if (s.length > 0) {
+    
+    if(t.length > 0) {
+      let s = t.match(/scale\((.*?)\)/)[0].replace( /^\D+/g, '').replace(/\)/g, '')
       return {
         x: Number(s),
         y: Number(s)

@@ -247,6 +247,12 @@ export default class WBApexTool {
   }
 
   private storage(display : boolean) {
+    let tempIndex: number
+    if(this.wbSession.getSelectedElement().tagName == 'DIV') {
+      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - 56
+    } else {
+      tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
+    }
     this.strElem.push(
       /**
        * Push new element to WBApexTool.strElem : any[]
@@ -259,7 +265,7 @@ export default class WBApexTool {
           {
             id: this.wbSession.getSelectedElement().id,
             tName: this.wbSession.getSelectedElement().tagName,
-            tIndex: Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
+            tIndex: tempIndex
           },
         style :
           {

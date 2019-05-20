@@ -26,7 +26,8 @@ window.onload = () => {
                         document.getElementById(item.name.id).style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }   
                 } else {
-                    let element = document.getElementsByTagName(item.name.tName).item(item.name.tIndex)
+                    let element : any = document.getElementsByTagName(item.name.tName).item(item.name.tIndex)
+                    console.log(document.getElementsByTagName(item.name.tName))
                     if(item.style.isDeleted == true) {
                         element.style.display = 'none'
                     } else {
