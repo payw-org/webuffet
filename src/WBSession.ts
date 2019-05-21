@@ -1,11 +1,13 @@
 import Ruler from "./Ruler"
+import html2canvas from 'html2canvas'
 
 //Save infromation for return to its original form
 interface OriginalState {
   coordinate: {
     x: number,
     y: number
-  }
+  },
+  imgSrc: string
 }
 
 interface FinalState {
@@ -29,6 +31,7 @@ export default class WBSession {
   private StateStack : FinalState[] = []
   private RedoStack : FinalState[] = []
   public wbState: 'pending'|'select'|'apex' = 'pending'
+  public tempImg: string
 
   constructor() {
     this.currentURL = window.location.href
@@ -37,11 +40,19 @@ export default class WBSession {
   setOriginal(elm: HTMLElement) {
     this.selectedElm = elm
     const rect = elm.getBoundingClientRect()
+    html2canvas(this.selectedElm, {
+      useCORS: true,
+      backgroundColor: null,
+    }).then((canvas: HTMLCanvasElement) => {
+      this.tempImg = canvas.toDataURL('image/png')
+      this.originalState.imgSrc = this.tempImg
+    })
     this.originalState = {
       coordinate: {
         x: rect.left + rect.width / 2,
         y: rect.top + rect.height / 2
-      }
+      },
+      imgSrc: ''
     }
 
     this.finalState = {

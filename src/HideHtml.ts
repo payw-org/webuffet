@@ -20,7 +20,7 @@ window.onload = () => {
             for(let key in items.myCustom) {
                 let item = items.myCustom[key]
                 if(item.url != document.URL) continue;
-
+                
                 if(item.name.id != "") {
                     if(item.style.isDeleted == true) {
                         document.getElementById(item.name.id).style.display = 'none'
