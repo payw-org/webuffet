@@ -1,6 +1,8 @@
+
 <!DOCTYPE html>
 <html>
   <head>
+      <meta charset="UTF-8">
     <style>
       body {
         width: 200px;
@@ -8,11 +10,35 @@
         padding: 20px;
         color: #222;
       }
+      .rbutton {
+        width: 58px;
+        height: 28px;
+        background-color: #65e61a;
+        border: none;
+        color:#fff;
+        padding: 5px 0;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 15px;
+        margin: 5px;
+        border-radius:15px 0 15px 0;
+        cursor: pointer;
+        }
     </style>
+    		<script src="jquery-3.1.1.min.js"></script>
+        <script src="jquery.jsonrpc.js"></script>
+    <script src="popup.js"></script>
+
   </head>
   <body>
-    <h1>WEBuffet</h1>
+    <h1>WEBuffet <input type="button" id="login_button" value="Log-in" class="rbutton"> </h1>
     <p>To activate WEBuffet, press and hold anywhere inside the page for just 1 second.</p>
     <p>It is recommended to target somewhere which is not a link or a button since they may work after press and hold.</p>
+
+    <p>auth result <p>
+        <div id="results"></div>
+        
   </body>
 </html>
+
