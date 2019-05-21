@@ -3,6 +3,9 @@ import html2canvas from 'html2canvas'
 
 let body = document.querySelector('html')
 body.style.visibility = 'hidden'
+// body.style.overflow = 'hidden'
+body.style.transform = 'translateX(-200%)'
+body.getBoundingClientRect().height
 
 /**
  * Codes read from chrome.storage.sync
@@ -10,14 +13,16 @@ body.style.visibility = 'hidden'
  */
 window.onload = () => {
     let body = document.querySelector('html')
+    body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
         * If matches, find elements in document with name and generate CSS for that element with style
         */
+       console.log(items.myCustom)
         if(!items.myCustom[0]) {
-            body.style.visibility = 'visible'
+            body.style.transform = ''
             return
         }
         
@@ -27,10 +32,16 @@ window.onload = () => {
             document.body.appendChild(srcElm)
             let imgSrcArr: Array<string> = []
             // for(let key in items.myCustom) {
-            for (let i = 0; i < items.myCustom.length; i++) {
+            for (let i = 0, j = 0; i < items.myCustom.length; i++) {
                 let item = items.myCustom[i]
                 let element: HTMLElement
-                if(item.url != document.URL) continue;
+                if(item.url != document.URL) {
+                    if (i >= items.myCustom.length - 1) {
+                        body.style.transform = ''
+                    }
+                    continue
+                }
+
                 
                 if(item.name.id != "") {
                     element = document.getElementById(item.name.id)
@@ -39,11 +50,12 @@ window.onload = () => {
                 } else {
                     element = document.getElementsByTagName(item.name.tName).item(item.name.tIndex) as HTMLElement
                 }
+
                 html2canvas(element, {
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
-                    imgSrcArr[i] = canvas.toDataURL('image/png')
+                    imgSrcArr[j++] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     // let e = document.createElement('div')
                     // e.setAttribute('data', canvas.toDataURL('image/png'))
@@ -54,7 +66,7 @@ window.onload = () => {
                         element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }
                     if(i >= items.myCustom.length - 1) {
-                        body.style.visibility = 'visible'
+                        body.style.transform = ''
                     }
                 })
             }
