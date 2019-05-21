@@ -107,14 +107,15 @@ export default {
       let temp = []
       this.modifiedItems = []
       chrome.storage.sync.get(['myCustom'], items => {
-        for (let i = 0; i < items.myCustom.length; i++) {
-          temp[i] = items.myCustom[i]
-          temp[i].imgSrc = this.captureData[i]
+        for (let i = 0, j = 0; i < items.myCustom.length; i++) {
+          if(items.myCustom[i].url === document.URL) {
+            temp[j] = items.myCustom[i]
+            temp[j].imgSrc = this.captureData[j]
+            j++
+          }
         }
         for (let i = 0; i < temp.length; i++) {
-          if (temp[i].url === document.URL) {
-            this.modifiedItems.push(temp[i])
-          }
+          this.modifiedItems.push(temp[i])
         }
         console.log(this.modifiedItems)
       })

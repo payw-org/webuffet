@@ -329,7 +329,13 @@ export default class WBApexTool {
 
   private addImgSrc() {
     if(document.getElementById('webuffet-image-sources') != null) {
-      let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+      let captures
+      if(document.querySelector('#webuffet-image-sources').getAttribute('data') == null) {
+        captures = []
+      } else {
+        captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+      }
+      console.log(this.wbSession.getOriginalState().imgSrc)
       captures.push(this.wbSession.getOriginalState().imgSrc)
       document.body.removeChild(document.getElementById('webuffet-image-sources'))
       let srcElm = document.createElement('div')
