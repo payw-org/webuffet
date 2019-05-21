@@ -329,19 +329,41 @@ export default class WBApexTool {
 
   private addImgSrc() {
     if(document.getElementById('webuffet-image-sources') != null) {
-      let captures
+      let captures: any[]
       if(document.querySelector('#webuffet-image-sources').getAttribute('data') == null) {
         captures = []
+        chrome.storage.sync.get(['myCustom'], item => {
+          for(let i = 0; i < item.myCustom.length; i++) {
+            if(item.myCustom[i].url != document.URL) {
+              console.log('push null')
+              captures.push('null')
+            } else break
+          }
+          captures.push(this.wbSession.getOriginalState().imgSrc)
+          console.log(captures)
+          document.body.removeChild(document.getElementById('webuffet-image-sources'))
+          let srcElm = document.createElement('div')
+          srcElm.id = 'webuffet-image-sources'
+          srcElm.setAttribute('data', JSON.stringify(captures))
+          document.body.appendChild(srcElm)
+        })
       } else {
         captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+        captures.push(this.wbSession.getOriginalState().imgSrc)
+        console.log(captures)
+        document.body.removeChild(document.getElementById('webuffet-image-sources'))
+        let srcElm = document.createElement('div')
+        srcElm.id = 'webuffet-image-sources'
+        srcElm.setAttribute('data', JSON.stringify(captures))
+        document.body.appendChild(srcElm)
       }
-      console.log(this.wbSession.getOriginalState().imgSrc)
-      captures.push(this.wbSession.getOriginalState().imgSrc)
-      document.body.removeChild(document.getElementById('webuffet-image-sources'))
-      let srcElm = document.createElement('div')
-      srcElm.id = 'webuffet-image-sources'
-      srcElm.setAttribute('data', JSON.stringify(captures))
-      document.body.appendChild(srcElm)
+      // captures.push(this.wbSession.getOriginalState().imgSrc)
+      // console.log(captures)
+      // document.body.removeChild(document.getElementById('webuffet-image-sources'))
+      // let srcElm = document.createElement('div')
+      // srcElm.id = 'webuffet-image-sources'
+      // srcElm.setAttribute('data', JSON.stringify(captures))
+      // document.body.appendChild(srcElm)
     } else {
       let captures: Array<string> = []
       captures[0] = this.wbSession.getOriginalState().imgSrc

@@ -110,13 +110,15 @@ export default {
         for (let i = 0, j = 0; i < items.myCustom.length; i++) {
           if(items.myCustom[i].url === document.URL) {
             temp[j] = items.myCustom[i]
-            temp[j].imgSrc = this.captureData[j]
+            temp[j].imgSrc = this.captureData[i]
             j++
           }
         }
         for (let i = 0; i < temp.length; i++) {
           this.modifiedItems.push(temp[i])
         }
+        console.log(this.captureData)
+        console.log(temp)
         console.log(this.modifiedItems)
       })
     }
