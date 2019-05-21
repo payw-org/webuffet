@@ -20,11 +20,11 @@ export default class WBSelector {
 
     document.addEventListener('startselector', this.start.bind(this))
     document.addEventListener('increasetime', ((event: CustomEvent) => {
-      this.time += 100
+      this.time += 200
     }) as EventListener);
     document.addEventListener('decreasetime', ((event: CustomEvent) => {
       if(this.time>100){
-        this.time -= 100
+        this.time -= 200
       }
     }) as EventListener);
   }

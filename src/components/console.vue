@@ -12,9 +12,20 @@
       </div>
     </div>
     <div class="wb-current-url-cooked scroll">
-      <div class="wb-item new" @click="startScanning" v-for="i in 10" :key="i">
+      <div class="wb-item new" @click="startScanning">
         <div class="wb-cross cross-1"></div>
         <div class="wb-cross cross-2"></div>
+      </div>
+      <div class="wb-item" v-for="(item, i) in modifiedItems" :key="i">
+        <p>id: {{ item.name.id }}</p>
+        <p>tName: {{ item.name.tName }}</p>
+        <p>tIndex: {{ item.name.tIndex }}</p>
+        <p>isDeleted: {{ item.style.isDeleted }}</p>
+        <p>translatex: {{ item.style.translatex }}</p>
+        <p>translatey: {{ item.style.translatey }}</p>
+        <p>roate: {{ item.style.roate }}</p>
+        <p>scale: {{ item.style.scale }}</p>
+        <img class="preview" :src="item.imgSrc" alt="">
       </div>
     </div>
     <h2 class="wb-setting-letter">Setting Time</h2>
@@ -24,11 +35,11 @@
     <div class="wb-for-down" @click="decreaseTime">
        <div class="wb-arrow down"></div>
     </div>
-    <div class="centered">
+    <!-- <div class="centered">
       <h2 class="other-pages-title">Cooked On Other Pages</h2>
     </div>
     <div class="wb-other-url-cooked">
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -38,7 +49,9 @@ import html2canvas from 'html2canvas'
 export default {
   data() {
     return {
-      isHidden: true
+      isHidden: true,
+      modifiedItems: [],
+      captureData: []
     }
   },
   computed: {
@@ -68,6 +81,20 @@ export default {
         this.$el.getBoundingClientRect().height
         this.isHidden = false
       })
+
+      // Load data and display on the console
+      let temp = []
+      chrome.storage.sync.get(['myCustom'], items => {
+        for (let i = 0; i < items.myCustom.length; i++) {
+          if (items.myCustom[i].url === document.URL) {
+            temp.push(items.myCustom[i])
+          }
+        }
+        this.modifiedItems = temp
+        for (let i = 0; i < this.modifiedItems.length; i++) {
+          this.modifiedItems[i].imgSrc = this.captureData[i]
+        }
+      })
     },
     hide() {
       this.isHidden = true
@@ -84,6 +111,10 @@ export default {
     decreaseTime(){
       document.dispatchEvent(new CustomEvent('decreasetime'))
     }
+  },
+  created() {
+    let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+    this.captureData = captures
   },
   mounted() {
     document.addEventListener('loadconsole', () => {
@@ -304,15 +335,21 @@ export default {
     padding-bottom: 15px;
 
     .wb-item {
+      box-sizing: border-box;
       display: inline-block;
+      vertical-align: top;
+      background-color: #fff;
+      word-break: break-all;
+      color: #000;
       width: 300px;
-      height: 200px;
       margin-right: 20px;
       position: relative;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
       will-change: transform;
       border-radius: 10px;
+      padding: 20px;
+      font-size: 20px;
 
       &:first-child {
         margin-left: 50px;
@@ -332,6 +369,7 @@ export default {
 
       &.new {
         background-color: #fff;
+        height: 200px;
 
         &, & * {
           cursor: pointer !important;
@@ -348,6 +386,10 @@ export default {
             transform: translateX(-50%) translateY(-50%);
           }
         }
+      }
+
+      .preview {
+        width: 100%;
       }
     }
   }
