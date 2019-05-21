@@ -12,9 +12,19 @@
       </div>
     </div>
     <div class="wb-current-url-cooked scroll">
-      <div class="wb-item new" @click="startScanning" v-for="i in 10" :key="i">
+      <div class="wb-item new" @click="startScanning">
         <div class="wb-cross cross-1"></div>
         <div class="wb-cross cross-2"></div>
+      </div>
+      <div class="wb-item" v-for="(item, i) in modifiedItems" :key="i">
+        <p>id: {{ item.name.id }}</p>
+        <p>tName: {{ item.name.tName }}</p>
+        <p>tIndex: {{ item.name.tIndex }}</p>
+        <p>isDeleted: {{ item.style.isDeleted }}</p>
+        <p>translatex: {{ item.style.translatex }}</p>
+        <p>translatey: {{ item.style.translatey }}</p>
+        <p>roate: {{ item.style.roate }}</p>
+        <p>scale: {{ item.style.scale }}</p>
       </div>
     </div>
     <h2 class="wb-setting-letter">Setting Time</h2>
@@ -38,7 +48,8 @@ import html2canvas from 'html2canvas'
 export default {
   data() {
     return {
-      isHidden: true
+      isHidden: true,
+      modifiedItems: []
     }
   },
   computed: {
@@ -67,6 +78,11 @@ export default {
 
         this.$el.getBoundingClientRect().height
         this.isHidden = false
+      })
+
+      // Load data and display on the console
+      chrome.storage.sync.get(['myCustom'], items => {
+        this.modifiedItems = items.myCustom
       })
     },
     hide() {
@@ -304,7 +320,12 @@ export default {
     padding-bottom: 15px;
 
     .wb-item {
+      box-sizing: border-box;
       display: inline-block;
+      vertical-align: top;
+      background-color: #fff;
+      word-break: break-all;
+      color: #000;
       width: 300px;
       height: 200px;
       margin-right: 20px;
@@ -313,6 +334,8 @@ export default {
       transition: transform 0.2s ease;
       will-change: transform;
       border-radius: 10px;
+      padding: 20px;
+      font-size: 20px;
 
       &:first-child {
         margin-left: 50px;
