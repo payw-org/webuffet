@@ -7,7 +7,7 @@ interface OriginalState {
     x: number,
     y: number
   },
-  imgSrc?: string
+  imgSrc: string
 }
 
 interface FinalState {
@@ -51,6 +51,7 @@ export default class WBSession {
         x: rect.left + rect.width / 2,
         y: rect.top + rect.height / 2
       },
+      imgSrc: ''
     }
 
     this.finalState = {
