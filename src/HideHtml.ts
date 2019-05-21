@@ -13,7 +13,6 @@ body.getBoundingClientRect().height
  */
 window.onload = () => {
     let body = document.querySelector('html')
-    let j: number = 0
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
         /**
@@ -21,7 +20,6 @@ window.onload = () => {
         * Get URL first, check the URL matches with document.URL
         * If matches, find elements in document with name and generate CSS for that element with style
         */
-       console.log(items.myCustom)
         if(!items.myCustom[0]) {
             body.style.transform = ''
             return
@@ -34,9 +32,9 @@ window.onload = () => {
             let imgSrcArr: Array<string> = []
             // for(let key in items.myCustom) {
             for (let i = 0; i < items.myCustom.length; i++) {
+                let num : number = i
                 let item = items.myCustom[i]
                 let element: HTMLElement
-                let num: number = i
                 if(item.url != document.URL) {
                     if (i >= items.myCustom.length - 1) {
                         body.style.transform = ''

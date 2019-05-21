@@ -320,13 +320,29 @@ export default class WBApexTool {
         }
       )
     }
-
+    this.addImgSrc()
     /**
      *  Save strElem to chrome.storage.sync
      */
-    chrome.storage.sync.set({ myCustom : this.strElem }, () => {
-      console.log(this.strElem)
-    })
+    chrome.storage.sync.set({ myCustom : this.strElem }, null)
   }
 
+  private addImgSrc() {
+    if(document.getElementById('webuffet-image-sources') != null) {
+      let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+      captures.push(this.wbSession.getOriginalState().imgSrc)
+      document.body.removeChild(document.getElementById('webuffet-image-sources'))
+      let srcElm = document.createElement('div')
+      srcElm.id = 'webuffet-image-sources'
+      srcElm.setAttribute('data', JSON.stringify(captures))
+      document.body.appendChild(srcElm)
+    } else {
+      let captures: Array<string> = []
+      captures.push(this.wbSession.getOriginalState().imgSrc)
+      let srcElm = document.createElement('div')
+      srcElm.id = 'webuffet-image-sources'
+      srcElm.setAttribute('data', JSON.stringify(captures))
+      document.body.appendChild(srcElm)
+    }
+  }
 }

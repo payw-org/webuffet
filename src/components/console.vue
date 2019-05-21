@@ -82,20 +82,8 @@ export default {
         this.isHidden = false
       })
 
-      // Load data and display on the console
-      let temp = []
-      chrome.storage.sync.get(['myCustom'], items => {
-        for (let i = 0; i < items.myCustom.length; i++) {
-          if (items.myCustom[i].url === document.URL) {
-            temp.push(items.myCustom[i])
-          }
-        }
-        this.modifiedItems = temp
-        for (let i = 0; i < this.modifiedItems.length; i++) {
-          this.modifiedItems[i].imgSrc = this.captureData[i]
-        }
-        console.log(this.modifiedItems)
-      })
+      //Load data and display on the console
+      this.printCooked()
     },
     hide() {
       this.isHidden = true
@@ -111,6 +99,22 @@ export default {
     },
     decreaseTime(){
       document.dispatchEvent(new CustomEvent('decreasetime'))
+    },
+    printCooked() {
+      //Load data and display on the console
+      let temp = []
+      this.modifiedItems.splice(0)
+      chrome.storage.sync.get(['myCustom'], items => {
+        for (let i = 0; i < items.myCustom.length; i++) {
+          temp[i] = items.myCustom[i]
+          temp[i].imgSrc = this.captureData[i]
+        }
+        for (let i = 0; i < temp.length; i++) {
+          if (temp[i].url === document.URL) {
+            this.modifiedItems.push(temp[i])
+          }
+        }
+      })
     }
   },
   created() {
