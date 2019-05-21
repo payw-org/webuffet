@@ -102,8 +102,10 @@ export default {
     },
     printCooked() {
       //Load data and display on the console
+      let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+      this.captureData = captures
       let temp = []
-      this.modifiedItems.splice(0)
+      this.modifiedItems = []
       chrome.storage.sync.get(['myCustom'], items => {
         for (let i = 0; i < items.myCustom.length; i++) {
           temp[i] = items.myCustom[i]
@@ -114,13 +116,13 @@ export default {
             this.modifiedItems.push(temp[i])
           }
         }
+        console.log(this.modifiedItems)
       })
     }
   },
   created() {
-    let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
-    console.log(captures)
-    this.captureData = captures
+    // let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+    // this.captureData = captures
   },
   mounted() {
     document.addEventListener('loadconsole', () => {

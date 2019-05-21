@@ -160,7 +160,7 @@ export default class WBApexTool {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
-      if(this.wbSession.getSelectedElement().style.length > 0) {
+      if(this.wbSession.getSelectedElement().style.transform.length > 0) {
         this.storage(false)
       }
       document.dispatchEvent(new CustomEvent('startselector'))
@@ -338,7 +338,7 @@ export default class WBApexTool {
       document.body.appendChild(srcElm)
     } else {
       let captures: Array<string> = []
-      captures.push(this.wbSession.getOriginalState().imgSrc)
+      captures[0] = this.wbSession.getOriginalState().imgSrc
       let srcElm = document.createElement('div')
       srcElm.id = 'webuffet-image-sources'
       srcElm.setAttribute('data', JSON.stringify(captures))
