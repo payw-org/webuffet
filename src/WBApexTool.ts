@@ -160,7 +160,9 @@ export default class WBApexTool {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
-      this.storage(false)
+      if(this.wbSession.getSelectedElement().style.length > 0) {
+        this.storage(false)
+      }
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
@@ -257,7 +259,6 @@ export default class WBApexTool {
     } else {
       tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
     }
-    console.log(document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length)
     if(this.wbSession.getSelectedElement().className.includes(' ') == true) {
       tempCName = ""
     } else {
