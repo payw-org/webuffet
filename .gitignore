@@ -4,3 +4,4 @@ build
 
 .DS_Store
 .vscode
+extension/popup.1.js
