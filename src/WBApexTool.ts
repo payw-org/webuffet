@@ -265,6 +265,14 @@ export default class WBApexTool {
       tempCName = this.wbSession.getSelectedElement().className
     }
 
+    for(let i = 0; i < this.strElem.length; i++) {
+      if(this.strElem[i].name.id == this.wbSession.getSelectedElement().id ||
+      (this.strElem[i].name.cName == tempCName && this.strElem[i].name.cIndex == Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement())) ||
+      (this.strElem[i].name.tName == this.wbSession.getSelectedElement().tagName && this.strElem[i].name.tIndex == tempIndex)) {
+        this.strElem.splice(i, 1)
+      }
+    }
+
     this.strElem.push(
       /**
        * Push new element to WBApexTool.strElem : any[]
