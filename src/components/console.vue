@@ -25,6 +25,7 @@
         <p>translatey: {{ item.style.translatey }}</p>
         <p>roate: {{ item.style.roate }}</p>
         <p>scale: {{ item.style.scale }}</p>
+        <img class="preview" :src="item.imgSrc" alt="">
       </div>
     </div>
     <h2 class="wb-setting-letter">Setting Time</h2>
@@ -34,11 +35,11 @@
     <div class="wb-for-down" @click="decreaseTime">
        <div class="wb-arrow down"></div>
     </div>
-    <div class="centered">
+    <!-- <div class="centered">
       <h2 class="other-pages-title">Cooked On Other Pages</h2>
     </div>
     <div class="wb-other-url-cooked">
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -49,7 +50,8 @@ export default {
   data() {
     return {
       isHidden: true,
-      modifiedItems: []
+      modifiedItems: [],
+      captureData: []
     }
   },
   computed: {
@@ -81,8 +83,17 @@ export default {
       })
 
       // Load data and display on the console
+      let temp = []
       chrome.storage.sync.get(['myCustom'], items => {
-        this.modifiedItems = items.myCustom
+        for (let i = 0; i < items.myCustom.length; i++) {
+          if (items.myCustom[i].url === document.URL) {
+            temp.push(items.myCustom[i])
+          }
+        }
+        this.modifiedItems = temp
+        for (let i = 0; i < this.modifiedItems.length; i++) {
+          this.modifiedItems[i].imgSrc = this.captureData[i]
+        }
       })
     },
     hide() {
@@ -100,6 +111,10 @@ export default {
     decreaseTime(){
       document.dispatchEvent(new CustomEvent('decreasetime'))
     }
+  },
+  created() {
+    let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+    this.captureData = captures
   },
   mounted() {
     document.addEventListener('loadconsole', () => {
@@ -327,7 +342,6 @@ export default {
       word-break: break-all;
       color: #000;
       width: 300px;
-      height: 200px;
       margin-right: 20px;
       position: relative;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -355,6 +369,7 @@ export default {
 
       &.new {
         background-color: #fff;
+        height: 200px;
 
         &, & * {
           cursor: pointer !important;
@@ -371,6 +386,10 @@ export default {
             transform: translateX(-50%) translateY(-50%);
           }
         }
+      }
+
+      .preview {
+        width: 100%;
       }
     }
   }
