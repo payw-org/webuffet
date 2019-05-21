@@ -160,7 +160,9 @@ export default class WBApexTool {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
-      this.storage(false)
+      if(this.wbSession.getSelectedElement().style.length > 0) {
+        this.storage(false)
+      }
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
@@ -248,11 +250,21 @@ export default class WBApexTool {
 
   private storage(display : boolean) {
     let tempIndex: number
+    let tempCName: string
+
     if(this.wbSession.getSelectedElement().tagName == 'DIV') {
-      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - 56
+      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length - 1
+    } else if (this.wbSession.getSelectedElement().tagName == 'SPAN') {
+      tempIndex = Array.from(document.getElementsByTagName('SPAN')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
     } else {
       tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
     }
+    if(this.wbSession.getSelectedElement().className.includes(' ') == true) {
+      tempCName = ""
+    } else {
+      tempCName = this.wbSession.getSelectedElement().className
+    }
+
     this.strElem.push(
       /**
        * Push new element to WBApexTool.strElem : any[]
@@ -264,6 +276,8 @@ export default class WBApexTool {
         name:
           {
             id: this.wbSession.getSelectedElement().id,
+            cName: tempCName,
+            cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
             tName: this.wbSession.getSelectedElement().tagName,
             tIndex: tempIndex
           },
