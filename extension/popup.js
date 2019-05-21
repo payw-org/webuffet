@@ -7,9 +7,14 @@ var settings = {
     "cache-control": "no-cache",
   }
 }
-              
+
+
 $(function() {
+
+	var strElem1 = [];
+
   $("#POST_BTN").click(function() {
+
 
 		var now = new Date();
 	
@@ -24,6 +29,17 @@ $(function() {
 			console.log(timeNow);
 
 		chrome.identity.getProfileUserInfo(function(userInfo){
+
+			chrome.storage.sync.get(['myCustom'], items  => {
+				if(items.myCustom[0] === {}) {
+					
+				} else {
+					for(let key in items.myCustom) {
+						strElem1.push(items.myCustom[key]);
+					}
+					console.dir(strElem1);
+				}
+			});
 			$.ajax({
 					"async": true,
   				"crossDomain": true,
@@ -37,42 +53,30 @@ $(function() {
 					success: function(data){
 						console.log(data);
 					},
-					"data":JSON.stringify({'userID':userInfo.id,'userEmail':userInfo.email,'createdAt':timeNow})
+					"data":JSON.stringify({'userID':userInfo.id,'userEmail':userInfo.email,'userTheme':strElem1,'createdAt':timeNow})
 				}); 
 	    });
 	});  
 
 
 	$("#GET_BTN").click(function() {
+
+		var strElem2=[];
+
 		$.ajax(settings).done(function (response) {
 			console.log(response);
-		});
-	});
-	
-});  
+			console.dir(response.data[0].userTheme[0]);
+			console.dir(Object.keys(response.data[0].userTheme).length);
 
-/*loginButton.onclick = function(){
-	console.log("login button");
-		chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
-			chrome.identity.getProfileUserInfo(function(userInfo){
-			  	$.ajax({
-					url:'http://localhost:14080/user',
-					dataType:'json',
-					type:'post',
-					success: function(data){
-						console.log(data);
-						chrome.storage.local.get('fcmid', function(result) {
-							if(result['fcmid']){
-						            sendFCM(result['fcmid']);
-						            console.log('creating fcm');
-						          }else{
-						            var senderIds = ["828025514635"];
-						            chrome.gcm.register(senderIds, afterFcm);
-						          }
-						      });
-					},
-					data:JSON.stringify({'token':token})
-				});
+			for(var i = 0; i < Object.keys(response.data[0].userTheme).length; i++){
+				strElem2.push(response.data[0].userTheme[i]);
+			}
+
+			chrome.storage.sync.set({ myCustom : strElem2 },null);
 		});
+
+		chrome.tabs.getSelected(null, function(tab) {
+			chrome.tabs.reload(tab.id);
 	});
-}*/
+	});	
+});  
