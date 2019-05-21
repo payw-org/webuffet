@@ -267,9 +267,10 @@ export default class WBApexTool {
     }
 
     for(let i = 0; i < this.strElem.length; i++) {
-      if((this.strElem[i].name.id != "" && document.getElementById(this.strElem[i].name.id) === this.wbSession.getSelectedElement()) ||
+      if(((this.strElem[i].name.id != "" && document.getElementById(this.strElem[i].name.id) === this.wbSession.getSelectedElement()) ||
       (this.strElem[i].name.cName != "" && document.getElementsByClassName(this.strElem[i].name.cName).item(this.strElem[i].name.cIndex) === this.wbSession.getSelectedElement()) ||
-      document.getElementsByTagName(this.strElem[i].name.tName).item(this.strElem[i].name.tIndex) === document.getElementsByTagName(this.wbSession.getSelectedElement().tagName).item(tempIndex)) {
+      document.getElementsByTagName(this.strElem[i].name.tName).item(this.strElem[i].name.tIndex) === document.getElementsByTagName(this.wbSession.getSelectedElement().tagName).item(tempIndex)) &&
+      this.strElem[i].url === document.URL) {
         this.strElem.splice(i, 1, {
           url: document.URL,
           name:
