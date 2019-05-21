@@ -27,6 +27,13 @@ window.onload = () => {
                     } else {
                         document.getElementById(item.name.id).style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }   
+                } else if(item.name.cName != "") {
+                    let element = document.getElementsByClassName(item.name.cName).item(item.name.cIndex) as HTMLElement
+                    if(item.style.isDeleted == true) {
+                        element.style.display = 'none'
+                    } else {
+                        element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
+                    }
                 } else {
                     let element : any = document.getElementsByTagName(item.name.tName).item(item.name.tIndex)
                     if(item.style.isDeleted == true) {

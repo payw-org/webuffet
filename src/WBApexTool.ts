@@ -248,11 +248,16 @@ export default class WBApexTool {
 
   private storage(display : boolean) {
     let tempIndex: number
+
     if(this.wbSession.getSelectedElement().tagName == 'DIV') {
-      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - 56
+      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
+    } else if (this.wbSession.getSelectedElement().tagName == 'SPAN') {
+      tempIndex = Array.from(document.getElementsByTagName('SPAN')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
     } else {
       tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
     }
+    console.log(tempIndex)
+
     this.strElem.push(
       /**
        * Push new element to WBApexTool.strElem : any[]
@@ -264,6 +269,8 @@ export default class WBApexTool {
         name:
           {
             id: this.wbSession.getSelectedElement().id,
+            cName: this.wbSession.getSelectedElement().className,
+            cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
             tName: this.wbSession.getSelectedElement().tagName,
             tIndex: tempIndex
           },
