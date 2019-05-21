@@ -248,15 +248,21 @@ export default class WBApexTool {
 
   private storage(display : boolean) {
     let tempIndex: number
+    let tempCName: string
 
     if(this.wbSession.getSelectedElement().tagName == 'DIV') {
-      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
+      tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length - 1
     } else if (this.wbSession.getSelectedElement().tagName == 'SPAN') {
       tempIndex = Array.from(document.getElementsByTagName('SPAN')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
     } else {
       tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
     }
-    console.log(tempIndex)
+    console.log(document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length)
+    if(this.wbSession.getSelectedElement().className.includes(' ') == true) {
+      tempCName = ""
+    } else {
+      tempCName = this.wbSession.getSelectedElement().className
+    }
 
     this.strElem.push(
       /**
@@ -269,7 +275,7 @@ export default class WBApexTool {
         name:
           {
             id: this.wbSession.getSelectedElement().id,
-            cName: this.wbSession.getSelectedElement().className,
+            cName: tempCName,
             cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
             tName: this.wbSession.getSelectedElement().tagName,
             tIndex: tempIndex
