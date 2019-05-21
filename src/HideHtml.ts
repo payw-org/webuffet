@@ -10,22 +10,26 @@ body.style.visibility = 'hidden'
  */
 window.onload = () => {
     let body = document.querySelector('html')
-    chrome.storage.sync.get(['myCustom'], function(items) {
+    chrome.storage.sync.get(['myCustom'], items => {
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
         * If matches, find elements in document with name and generate CSS for that element with style
         */
-        if(items.myCustom[0] === {}) return
+        if(!items.myCustom[0]) {
+            body.style.visibility = 'visible'
+            return
+        }
         
         else {
             let srcElm = document.createElement('div')
             srcElm.id = 'webuffet-image-sources'
-            let imgSrcArr: Array<string> = []
             document.body.appendChild(srcElm)
-            for(let key in items.myCustom) {
-                let item = items.myCustom[key]
-                let element
+            let imgSrcArr: Array<string> = []
+            // for(let key in items.myCustom) {
+            for (let i = 0; i < items.myCustom.length; i++) {
+                let item = items.myCustom[i]
+                let element: HTMLElement
                 if(item.url != document.URL) continue;
                 
                 if(item.name.id != "") {
@@ -39,17 +43,21 @@ window.onload = () => {
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
-                    imgSrcArr.push(canvas.toDataURL('image/png'))
+                    imgSrcArr[i] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
+                    // let e = document.createElement('div')
+                    // e.setAttribute('data', canvas.toDataURL('image/png'))
+                    // document.querySelector('#webuffet-image-sources').appendChild(e)
+                    if(item.style.isDeleted == true) {
+                        element.style.display = 'none'
+                    } else {
+                        element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
+                    }
+                    if(i >= items.myCustom.length - 1) {
+                        body.style.visibility = 'visible'
+                    }
                 })
-
-                if(item.style.isDeleted == true) {
-                    element.style.display = 'none'
-                } else {
-                    element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
-                }   
             }
         }
     })
-    body.style.visibility = 'visible'
 }
