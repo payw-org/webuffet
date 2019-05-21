@@ -4,7 +4,7 @@ import html2canvas from 'html2canvas'
 let body = document.querySelector('html')
 body.style.visibility = 'hidden'
 // body.style.overflow = 'hidden'
-body.style.transform = 'translateX(-200%)'
+body.style.transform = 'translateX(-400%)'
 body.getBoundingClientRect().height
 
 /**

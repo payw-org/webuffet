@@ -336,7 +336,6 @@ export default class WBApexTool {
         chrome.storage.sync.get(['myCustom'], item => {
           for(let i = 0; i < item.myCustom.length; i++) {
             if(item.myCustom[i].url != document.URL) {
-              console.log('push null')
               captures.push('null')
             } else break
           }
