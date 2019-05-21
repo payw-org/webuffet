@@ -13,6 +13,7 @@ body.getBoundingClientRect().height
  */
 window.onload = () => {
     let body = document.querySelector('html')
+    let j: number = 0
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
         /**
@@ -32,9 +33,10 @@ window.onload = () => {
             document.body.appendChild(srcElm)
             let imgSrcArr: Array<string> = []
             // for(let key in items.myCustom) {
-            for (let i = 0, j = 0; i < items.myCustom.length; i++) {
+            for (let i = 0; i < items.myCustom.length; i++) {
                 let item = items.myCustom[i]
                 let element: HTMLElement
+                let num: number = i
                 if(item.url != document.URL) {
                     if (i >= items.myCustom.length - 1) {
                         body.style.transform = ''
@@ -55,7 +57,7 @@ window.onload = () => {
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
-                    imgSrcArr[j++] = canvas.toDataURL('image/png')
+                    imgSrcArr[num] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     // let e = document.createElement('div')
                     // e.setAttribute('data', canvas.toDataURL('image/png'))

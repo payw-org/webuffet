@@ -94,6 +94,7 @@ export default {
         for (let i = 0; i < this.modifiedItems.length; i++) {
           this.modifiedItems[i].imgSrc = this.captureData[i]
         }
+        console.log(this.modifiedItems)
       })
     },
     hide() {
@@ -114,6 +115,7 @@ export default {
   },
   created() {
     let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+    console.log(captures)
     this.captureData = captures
   },
   mounted() {

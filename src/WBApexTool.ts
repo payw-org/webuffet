@@ -251,6 +251,7 @@ export default class WBApexTool {
   private storage(display : boolean) {
     let tempIndex: number
     let tempCName: string
+    let isReplaced: boolean = false
 
     if(this.wbSession.getSelectedElement().tagName == 'DIV') {
       tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length - 1
@@ -266,44 +267,66 @@ export default class WBApexTool {
     }
 
     for(let i = 0; i < this.strElem.length; i++) {
-      if(this.strElem[i].name.id == this.wbSession.getSelectedElement().id ||
-      (this.strElem[i].name.cName == tempCName && this.strElem[i].name.cIndex == Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement())) ||
-      (this.strElem[i].name.tName == this.wbSession.getSelectedElement().tagName && this.strElem[i].name.tIndex == tempIndex)) {
-        this.strElem.splice(i, 1)
+      if((this.strElem[i].name.id != "" && document.getElementById(this.strElem[i].name.id) === this.wbSession.getSelectedElement()) ||
+      (this.strElem[i].name.cName != "" && document.getElementsByClassName(this.strElem[i].name.cName).item(this.strElem[i].name.cIndex) === this.wbSession.getSelectedElement()) ||
+      document.getElementsByTagName(this.strElem[i].name.tName).item(this.strElem[i].name.tIndex) === document.getElementsByTagName(this.wbSession.getSelectedElement().tagName).item(tempIndex)) {
+        this.strElem.splice(i, 1, {
+          url: document.URL,
+          name:
+            {
+              id: this.wbSession.getSelectedElement().id,
+              cName: tempCName,
+              cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
+              tName: this.wbSession.getSelectedElement().tagName,
+              tIndex: tempIndex
+            },
+          style :
+            {
+              isDeleted : display,
+              translatex : this.wbSession.getFinalState().translate.x,
+              translatey : this.wbSession.getFinalState().translate.y,
+              rotate : this.wbSession.getFinalState().rotate,
+              scale : this.wbSession.getFinalState().scale
+            }
+        })
+        isReplaced = true
       }
     }
-
-    this.strElem.push(
-      /**
-       * Push new element to WBApexTool.strElem : any[]
-       * All array of strElem will be stored in chrome.storage.sync
-       * It will be loaded after window.onload
-       */
-      {
-        url: document.URL,
-        name:
-          {
-            id: this.wbSession.getSelectedElement().id,
-            cName: tempCName,
-            cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
-            tName: this.wbSession.getSelectedElement().tagName,
-            tIndex: tempIndex
-          },
-        style :
-          {
-            isDeleted : display,
-            translatex : this.wbSession.getFinalState().translate.x,
-            translatey : this.wbSession.getFinalState().translate.y,
-            rotate : this.wbSession.getFinalState().rotate,
-            scale : this.wbSession.getFinalState().scale
-          }
-      }
-    )
+    if(isReplaced != true) {
+      this.strElem.push(
+        /**
+         * Push new element to WBApexTool.strElem : any[]
+         * All array of strElem will be stored in chrome.storage.sync
+         * It will be loaded after window.onload
+         */
+        {
+          url: document.URL,
+          name:
+            {
+              id: this.wbSession.getSelectedElement().id,
+              cName: tempCName,
+              cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
+              tName: this.wbSession.getSelectedElement().tagName,
+              tIndex: tempIndex
+            },
+          style :
+            {
+              isDeleted : display,
+              translatex : this.wbSession.getFinalState().translate.x,
+              translatey : this.wbSession.getFinalState().translate.y,
+              rotate : this.wbSession.getFinalState().rotate,
+              scale : this.wbSession.getFinalState().scale
+            }
+        }
+      )
+    }
 
     /**
      *  Save strElem to chrome.storage.sync
      */
-    chrome.storage.sync.set({ myCustom : this.strElem }, null)
+    chrome.storage.sync.set({ myCustom : this.strElem }, () => {
+      console.log(this.strElem)
+    })
   }
 
 }
