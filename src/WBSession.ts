@@ -46,11 +46,12 @@ export default class WBSession {
     this.selectedElm = elm
     const rect = elm.getBoundingClientRect()
     html2canvas(this.selectedElm, {
-      allowTaint: true,
+      //allowTaint: true,
       useCORS: true,
       backgroundColor: null,
     }).then((canvas: HTMLCanvasElement) => {
       this.originalState.imgSrc = canvas.toDataURL('image/png')
+      // console.log(this.originalState.imgSrc)
     })
     this.originalState = {
       coordinate: {

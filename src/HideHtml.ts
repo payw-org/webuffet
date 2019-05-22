@@ -15,7 +15,7 @@ window.onload = () => {
     let body = document.querySelector('html')
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
-        console.log(items.myCustom)
+        // console.log(items.myCustom)
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
