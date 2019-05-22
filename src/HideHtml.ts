@@ -40,6 +40,7 @@ window.onload = () => {
                     if (i >= items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
+                    imgSrcArr[num] = 'null'
                     continue
                 }
 

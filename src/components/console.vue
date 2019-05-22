@@ -118,8 +118,6 @@ export default {
           this.modifiedItems.push(temp[i])
         }
         console.log(this.captureData)
-        console.log(temp)
-        console.log(this.modifiedItems)
       })
     }
   },
