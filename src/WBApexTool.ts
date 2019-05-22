@@ -46,7 +46,7 @@ export default class WBApexTool {
     this.scaleBtn = this.apexToolElm.querySelector('.scale')
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
-    // Save changes done before
+    // Save changes done before 
     chrome.storage.sync.get(['myCustom'], items  => {
       if(items.myCustom[0] === {}) {
         
