@@ -4,7 +4,7 @@ import html2canvas from 'html2canvas'
 let body = document.querySelector('html')
 body.style.visibility = 'hidden'
 // body.style.overflow = 'hidden'
-body.style.transform = 'translateX(-200%)'
+body.style.transform = 'translateX(-400%)'
 body.getBoundingClientRect().height
 
 /**
@@ -15,12 +15,12 @@ window.onload = () => {
     let body = document.querySelector('html')
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
+        console.log(items.myCustom)
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
         * If matches, find elements in document with name and generate CSS for that element with style
         */
-       console.log(items.myCustom)
         if(!items.myCustom[0]) {
             body.style.transform = ''
             return
@@ -32,13 +32,15 @@ window.onload = () => {
             document.body.appendChild(srcElm)
             let imgSrcArr: Array<string> = []
             // for(let key in items.myCustom) {
-            for (let i = 0, j = 0; i < items.myCustom.length; i++) {
+            for (let i = 0; i < items.myCustom.length; i++) {
+                let num : number = i
                 let item = items.myCustom[i]
                 let element: HTMLElement
                 if(item.url != document.URL) {
                     if (i >= items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
+                    imgSrcArr[num] = 'null'
                     continue
                 }
 
@@ -55,7 +57,7 @@ window.onload = () => {
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
-                    imgSrcArr[j++] = canvas.toDataURL('image/png')
+                    imgSrcArr[num] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     // let e = document.createElement('div')
                     // e.setAttribute('data', canvas.toDataURL('image/png'))

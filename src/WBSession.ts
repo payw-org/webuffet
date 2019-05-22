@@ -44,8 +44,7 @@ export default class WBSession {
       useCORS: true,
       backgroundColor: null,
     }).then((canvas: HTMLCanvasElement) => {
-      this.tempImg = canvas.toDataURL('image/png')
-      this.originalState.imgSrc = this.tempImg
+      this.originalState.imgSrc = canvas.toDataURL('image/png')
     })
     this.originalState = {
       coordinate: {

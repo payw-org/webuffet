@@ -160,7 +160,7 @@ export default class WBApexTool {
     // Escape ApexTool with no operations
     if(e.key == 'Escape') {
       this.stop()
-      if(this.wbSession.getSelectedElement().style.length > 0) {
+      if(this.wbSession.getSelectedElement().style.transform.length > 0) {
         this.storage(false)
       }
       document.dispatchEvent(new CustomEvent('startselector'))
@@ -251,6 +251,7 @@ export default class WBApexTool {
   private storage(display : boolean) {
     let tempIndex: number
     let tempCName: string
+    let isReplaced: boolean = false
 
     if(this.wbSession.getSelectedElement().tagName == 'DIV') {
       tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length - 1
@@ -265,37 +266,103 @@ export default class WBApexTool {
       tempCName = this.wbSession.getSelectedElement().className
     }
 
-    this.strElem.push(
-      /**
-       * Push new element to WBApexTool.strElem : any[]
-       * All array of strElem will be stored in chrome.storage.sync
-       * It will be loaded after window.onload
-       */
-      {
-        url: document.URL,
-        name:
-          {
-            id: this.wbSession.getSelectedElement().id,
-            cName: tempCName,
-            cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
-            tName: this.wbSession.getSelectedElement().tagName,
-            tIndex: tempIndex
-          },
-        style :
-          {
-            isDeleted : display,
-            translatex : this.wbSession.getFinalState().translate.x,
-            translatey : this.wbSession.getFinalState().translate.y,
-            rotate : this.wbSession.getFinalState().rotate,
-            scale : this.wbSession.getFinalState().scale
-          }
+    for(let i = 0; i < this.strElem.length; i++) {
+      if(((this.strElem[i].name.id != "" && document.getElementById(this.strElem[i].name.id) === this.wbSession.getSelectedElement()) ||
+      (this.strElem[i].name.cName != "" && document.getElementsByClassName(this.strElem[i].name.cName).item(this.strElem[i].name.cIndex) === this.wbSession.getSelectedElement()) ||
+      document.getElementsByTagName(this.strElem[i].name.tName).item(this.strElem[i].name.tIndex) === document.getElementsByTagName(this.wbSession.getSelectedElement().tagName).item(tempIndex)) &&
+      this.strElem[i].url === document.URL) {
+        this.strElem.splice(i, 1, {
+          url: document.URL,
+          name:
+            {
+              id: this.wbSession.getSelectedElement().id,
+              cName: tempCName,
+              cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
+              tName: this.wbSession.getSelectedElement().tagName,
+              tIndex: tempIndex
+            },
+          style :
+            {
+              isDeleted : display,
+              translatex : this.wbSession.getFinalState().translate.x,
+              translatey : this.wbSession.getFinalState().translate.y,
+              rotate : this.wbSession.getFinalState().rotate,
+              scale : this.wbSession.getFinalState().scale
+            }
+        })
+        isReplaced = true
       }
-    )
-
+    }
+    if(isReplaced != true) {
+      this.strElem.push(
+        /**
+         * Push new element to WBApexTool.strElem : any[]
+         * All array of strElem will be stored in chrome.storage.sync
+         * It will be loaded after window.onload
+         */
+        {
+          url: document.URL,
+          name:
+            {
+              id: this.wbSession.getSelectedElement().id,
+              cName: tempCName,
+              cIndex: Array.from(document.getElementsByClassName(this.wbSession.getSelectedElement().className)).indexOf(this.wbSession.getSelectedElement()),
+              tName: this.wbSession.getSelectedElement().tagName,
+              tIndex: tempIndex
+            },
+          style :
+            {
+              isDeleted : display,
+              translatex : this.wbSession.getFinalState().translate.x,
+              translatey : this.wbSession.getFinalState().translate.y,
+              rotate : this.wbSession.getFinalState().rotate,
+              scale : this.wbSession.getFinalState().scale
+            }
+        }
+      )
+    }
+    this.addImgSrc()
     /**
      *  Save strElem to chrome.storage.sync
      */
     chrome.storage.sync.set({ myCustom : this.strElem }, null)
   }
 
+  private addImgSrc() {
+    if(document.getElementById('webuffet-image-sources') != null) {
+      let captures: Array<String> = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+      if(captures == null) {
+        captures = []
+        chrome.storage.sync.get(['myCustom'], item => {
+          for(let i = 0; i < item.myCustom.length; i++) {
+            if(item.myCustom[i].url != document.URL) {
+              captures.push('null')
+            } else break
+          }
+          captures.push(this.wbSession.getOriginalState().imgSrc)
+          document.body.removeChild(document.getElementById('webuffet-image-sources'))
+          let srcElm = document.createElement('div')
+          srcElm.id = 'webuffet-image-sources'
+          srcElm.setAttribute('data', JSON.stringify(captures))
+          document.body.appendChild(srcElm)
+        })
+      } else {
+        chrome.storage.sync.get(['myCustom'], item => {
+          captures.push(this.wbSession.getOriginalState().imgSrc)
+          document.body.removeChild(document.getElementById('webuffet-image-sources'))
+          let srcElm = document.createElement('div')
+          srcElm.id = 'webuffet-image-sources'
+          srcElm.setAttribute('data', JSON.stringify(captures))
+          document.body.appendChild(srcElm)
+        })
+      }
+    } else {
+      let captures: Array<string> = []
+      captures[0] = this.wbSession.getOriginalState().imgSrc
+      let srcElm = document.createElement('div')
+      srcElm.id = 'webuffet-image-sources'
+      srcElm.setAttribute('data', JSON.stringify(captures))
+      document.body.appendChild(srcElm)
+    }
+  }
 }

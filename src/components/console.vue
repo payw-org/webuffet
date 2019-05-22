@@ -82,19 +82,8 @@ export default {
         this.isHidden = false
       })
 
-      // Load data and display on the console
-      let temp = []
-      chrome.storage.sync.get(['myCustom'], items => {
-        for (let i = 0; i < items.myCustom.length; i++) {
-          if (items.myCustom[i].url === document.URL) {
-            temp.push(items.myCustom[i])
-          }
-        }
-        this.modifiedItems = temp
-        for (let i = 0; i < this.modifiedItems.length; i++) {
-          this.modifiedItems[i].imgSrc = this.captureData[i]
-        }
-      })
+      //Load data and display on the console
+      this.printCooked()
     },
     hide() {
       this.isHidden = true
@@ -110,11 +99,31 @@ export default {
     },
     decreaseTime(){
       document.dispatchEvent(new CustomEvent('decreasetime'))
+    },
+    printCooked() {
+      //Load data and display on the console
+      let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+      this.captureData = captures
+      let temp = []
+      this.modifiedItems = []
+      chrome.storage.sync.get(['myCustom'], items => {
+        for (let i = 0, j = 0; i < items.myCustom.length; i++) {
+          if(items.myCustom[i].url === document.URL) {
+            temp[j] = items.myCustom[i]
+            temp[j].imgSrc = this.captureData[i]
+            j++
+          }
+        }
+        for (let i = 0; i < temp.length; i++) {
+          this.modifiedItems.push(temp[i])
+        }
+        console.log(this.captureData)
+      })
     }
   },
   created() {
-    let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
-    this.captureData = captures
+    // let captures = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
+    // this.captureData = captures
   },
   mounted() {
     document.addEventListener('loadconsole', () => {
