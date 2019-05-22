@@ -192,6 +192,13 @@ export default class WBApexTool {
     this.wbSession.wbState = 'apex'
     
     // Add event listeners using EventCollector
+    this.eventCollector.attachEvent(this.moreBtn, 'click', () => {
+      this.stop()
+      if(this.wbSession.getSelectedElement().style.transform.length > 0) {
+        this.storage(false)
+      }
+      document.dispatchEvent(new CustomEvent('startselector'))
+    })
     this.eventCollector.attachEvent(window, 'mousedown', this.onMouseDown.bind(this))
     this.eventCollector.attachEvent(window, 'mousemove', this.onMouseMove.bind(this))
     this.eventCollector.attachEvent(window, 'mouseup', this.onMouseUp.bind(this))
@@ -234,8 +241,8 @@ export default class WBApexTool {
     this.rotateBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
     this.removeBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
     this.removeBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    // this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    // this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
+    this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
+    this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
   }
 
   // removes the selected element
