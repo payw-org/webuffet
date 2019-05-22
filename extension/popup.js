@@ -8,13 +8,11 @@ var settings = {
   }
 }
 
-
 $(function() {
 
 	var strElem1 = [];
 
   $("#POST_BTN").click(function() {
-
 
 		var now = new Date();
 	
@@ -31,16 +29,15 @@ $(function() {
 		chrome.identity.getProfileUserInfo(function(userInfo){
 
 			chrome.storage.sync.get(['myCustom'], items  => {
-				if(items.myCustom[0] === {}) {
-					
+
+				if(items.myCustom[0] === {}) {			
 				} else {
 					for(let key in items.myCustom) {
 						strElem1.push(items.myCustom[key]);
 					}
-					console.dir(strElem1);
 				}
-			});
-			$.ajax({
+
+				$.ajax({
 					"async": true,
   				"crossDomain": true,
 					"url": "http://localhost:3000/api/WBF",
@@ -55,28 +52,47 @@ $(function() {
 					},
 					"data":JSON.stringify({'userID':userInfo.id,'userEmail':userInfo.email,'userTheme':strElem1,'createdAt':timeNow})
 				}); 
-	    });
+
+			});
+	  });
 	});  
 
 
 	$("#GET_BTN").click(function() {
 
 		var strElem2=[];
-
-		$.ajax(settings).done(function (response) {
-			console.log(response);
-			console.dir(response.data[0].userTheme[0]);
-			console.dir(Object.keys(response.data[0].userTheme).length);
-
-			for(var i = 0; i < Object.keys(response.data[0].userTheme).length; i++){
-				strElem2.push(response.data[0].userTheme[i]);
-			}
-
-			chrome.storage.sync.set({ myCustom : strElem2 },null);
-		});
+		var currul;
 
 		chrome.tabs.getSelected(null, function(tab) {
-			chrome.tabs.reload(tab.id);
-	});
+			myFunction(tab.url);
+	  });
+
+		function myFunction(tablink) {
+			currul = tablink;
+			console.log(tablink);
+		}
+
+		$.ajax(settings).done(function (response) {
+
+			console.log(response);
+
+			var t = 0;
+			for(var i =0; i<response.data.length;i++){
+				for(var j=0; j<Object.keys(response.data[i].userTheme).length;j++){
+					strElem2.push(response.data[i].userTheme[j]);
+				}
+			}
+
+			console.log("save to sync storage");
+			chrome.storage.sync.set({ myCustom : strElem2 },function(){
+				chrome.tabs.query({status:'complete'}, (tabs)=>{
+					tabs.forEach((tab)=>{
+							if(tab.url){
+									chrome.tabs.update(tab.id,{url: tab.url});
+							 }
+							});
+					});
+		  });
+	  });
 	});	
 });  
