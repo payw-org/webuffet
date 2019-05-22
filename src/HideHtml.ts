@@ -59,7 +59,6 @@ window.onload = () => {
                 }
                 
                 html2canvas(element, {
-                    allowTaint: true,
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
