@@ -17,24 +17,24 @@
         <div class="wb-cross cross-2"></div>
       </div>
       <div class="wb-item" v-for="(item, i) in modifiedItems" :key="i">
-        <p>id: {{ item.name.id }}</p>
+        <!-- <p>id: {{ item.name.id }}</p>
         <p>tName: {{ item.name.tName }}</p>
         <p>tIndex: {{ item.name.tIndex }}</p>
         <p>isDeleted: {{ item.style.isDeleted }}</p>
         <p>translatex: {{ item.style.translatex }}</p>
         <p>translatey: {{ item.style.translatey }}</p>
-        <p>roate: {{ item.style.roate }}</p>
-        <p>scale: {{ item.style.scale }}</p>
+        <p>rotate: {{ item.style.rotate }}</p>
+        <p>scale: {{ item.style.scale }}</p> -->
         <img class="preview" :src="item.imgSrc" alt="">
       </div>
     </div>
-    <h2 class="wb-setting-letter">Setting Time</h2>
+    <!-- <h2 class="wb-setting-letter">Setting Time</h2>
     <div class="wb-for-up" @click="increaseTime">
      <div class="wb-arrow up"></div>
     </div>
     <div class="wb-for-down" @click="decreaseTime">
        <div class="wb-arrow down"></div>
-    </div>
+    </div> -->
     <!-- <div class="centered">
       <h2 class="other-pages-title">Cooked On Other Pages</h2>
     </div>
@@ -61,34 +61,41 @@ export default {
   },
   methods: {
     start() {
-      this.show()
+      this.$el.getBoundingClientRect().width
+      setTimeout(() => {
+        this.$nextTick(() => {
+          this.show()
+        })
+      }, 100)
     },
     stop() {
       this.hide()
       document.dispatchEvent(new CustomEvent('consolestop'))
     },
     show() {
-      html2canvas(document.body, {
-        allowTaint: true,
-        useCORS: true
-      }).then(canvas => {
-        canvas.id = 'wbc-blurry-background'
-        canvas.style.position = 'absolute'
-        canvas.style.zIndex = '999999999'
-        canvas.style.filter = 'blur(20px) saturate(1.2)'
-        document.body.insertBefore(canvas, document.body.firstChild)
+      // html2canvas(document.body, {
+      //   allowTaint: true,
+      //   useCORS: true
+      // }).then(canvas => {
+      //   canvas.id = 'wbc-blurry-background'
+      //   canvas.style.position = 'absolute'
+      //   canvas.style.zIndex = '999999999'
+      //   canvas.style.filter = 'blur(20px) saturate(1.2)'
+      //   document.body.insertBefore(canvas, document.body.firstChild)
 
-        this.$el.getBoundingClientRect().height
-        this.isHidden = false
-      })
+      //   this.$el.getBoundingClientRect().height
+      //   this.isHidden = false
+      // })
+
+      this.isHidden = false
 
       //Load data and display on the console
       this.printCooked()
     },
     hide() {
       this.isHidden = true
-      let bg = document.querySelector('#wbc-blurry-background')
-      bg.parentElement.removeChild(bg)
+      // let bg = document.querySelector('#wbc-blurry-background')
+      // bg.parentElement.removeChild(bg)
     },
     startScanning() {
       this.hide()
@@ -143,7 +150,7 @@ export default {
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: rgba(#000, 0.7);
+  background-color: rgba(#111, 0.9);
   z-index: 2147483646;
   overflow-x: hidden;
   overflow-y: auto;
@@ -342,6 +349,7 @@ export default {
     white-space: nowrap;
     padding-top: 15px;
     padding-bottom: 15px;
+    font-size: 0;
 
     .wb-item {
       box-sizing: border-box;
@@ -351,7 +359,7 @@ export default {
       word-break: break-all;
       color: #000;
       width: 300px;
-      margin-right: 20px;
+      margin-right: 25px;
       position: relative;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
