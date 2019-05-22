@@ -19,7 +19,7 @@ let wait = function () {
     window.removeEventListener('mousedown', wait)
     window.removeEventListener('mousemove', clear)
     window.removeEventListener('mouseup', clear)
-  }, 0)
+  }, 1000)
 }
 
 let clear = function () {

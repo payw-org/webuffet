@@ -32,7 +32,11 @@ window.onload = () => {
             document.body.appendChild(srcElm)
             let imgSrcArr: Array<string> = []
             // for(let key in items.myCustom) {
-            for (let i = 0; i < items.myCustom.length; i++) {
+
+            let processElement = function (items: any, i: number) {
+                if (i > items.myCustom.length - 1) {
+                    return
+                }
                 let num : number = i
                 let item = items.myCustom[i]
                 let element: HTMLElement
@@ -41,9 +45,10 @@ window.onload = () => {
                         body.style.transform = ''
                     }
                     imgSrcArr[num] = 'null'
-                    continue
+                    processElement(items, i+1)
+                    return
                 }
-
+                
                 
                 if(item.name.id != "") {
                     element = document.getElementById(item.name.id)
@@ -52,7 +57,7 @@ window.onload = () => {
                 } else {
                     element = document.getElementsByTagName(item.name.tName).item(item.name.tIndex) as HTMLElement
                 }
-
+                
                 html2canvas(element, {
                     useCORS: true,
                     backgroundColor: null,
@@ -70,8 +75,16 @@ window.onload = () => {
                     if(i >= items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
+
+                    processElement(items, i + 1)
                 })
             }
+
+            processElement(items, 0)
+
+            // for (let i = 0; i < items.myCustom.length; i++) {
+                
+            // }
         }
     })
 }

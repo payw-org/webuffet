@@ -32,15 +32,21 @@ export default class WBSession {
   private RedoStack : FinalState[] = []
   public wbState: 'pending'|'select'|'apex' = 'pending'
   public tempImg: string
+  public isThanos: boolean = false
 
   constructor() {
     this.currentURL = window.location.href
+
+    document.addEventListener('allowthanos', () => {
+      this.isThanos = !this.isThanos
+    })
   }
 
   setOriginal(elm: HTMLElement) {
     this.selectedElm = elm
     const rect = elm.getBoundingClientRect()
     html2canvas(this.selectedElm, {
+      allowTaint: true,
       useCORS: true,
       backgroundColor: null,
     }).then((canvas: HTMLCanvasElement) => {

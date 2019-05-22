@@ -10,7 +10,7 @@ export default class WBSelector {
   private mouseMoveTimeout: number
   private triggerTimeout: number
   private eventCollector: EventCollector
-  private time = 300
+  private time = 800
 
   constructor(selectorElm: HTMLElement, wbSession: WBSession) {
     this.selectorElm = selectorElm
