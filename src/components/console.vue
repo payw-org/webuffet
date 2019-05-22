@@ -130,7 +130,7 @@ export default {
         for (let i = 0; i < temp.length; i++) {
           this.modifiedItems.push(temp[i])
         }
-        console.log(this.captureData)
+        // console.log(this.captureData)
       })
     }
   },
