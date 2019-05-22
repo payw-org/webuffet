@@ -248,11 +248,16 @@ export default class WBApexTool {
   // removes the selected element
   private remove() {
     // Stop ApexTool and go back to Selector after remove element
-    this.wbSession.getSelectedElement().style.display = 'none'
     this.stop()
     this.storage(true)
 
-    document.dispatchEvent(new CustomEvent('startselector'))
+    if (this.wbSession.isThanos) {
+      Thanos.snapFingers(this.wbSession.getSelectedElement())
+      document.dispatchEvent(new CustomEvent('consolestop'))
+    } else {
+      this.wbSession.getSelectedElement().style.display = 'none'
+      document.dispatchEvent(new CustomEvent('startselector'))
+    }
   }
 
   private storage(display : boolean) {
