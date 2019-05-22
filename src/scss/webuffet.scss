@@ -71,6 +71,9 @@ body {
       &.left-bottom {
         left: -$margin;
         bottom: -$margin;
+        background-image: url('../images/check.svg');
+        background-color: #ff9a16;
+        background-position: 45% 55%;
       }
     }
   }
