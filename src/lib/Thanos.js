@@ -11,7 +11,9 @@ export default class Thanos {
     this.chance = new Chance()
 
     html2canvas(elm, {
-      useCORS: true
+      allowTaint: true,
+      useCORS: true,
+      backgroundColor: null
     }).then(canvas => {
       //capture all div data as image
       var ctx = canvas.getContext("2d");
