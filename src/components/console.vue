@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="centered">
-      <button style="margin-top: 100px;" @click="allowThanos">Thanos</button>
+      <button style="margin-top: 100px;" @click="allowThanos"><span v-if = "!isThanos">Allow Thanos</span><span v-else>Thanos Activated</span></button>
     </div>
     <!-- <h2 class="wb-setting-letter">Setting Time</h2>
     <div class="wb-for-up" @click="increaseTime">
@@ -60,7 +60,8 @@ export default {
     return {
       isHidden: true,
       modifiedItems: [],
-      captureData: []
+      captureData: [],
+      isThanos: false
     }
   },
   computed: {
@@ -70,6 +71,7 @@ export default {
   },
   methods: {
     allowThanos() {
+      this.isThanos = !this.isThanos
       document.dispatchEvent(new CustomEvent('allowthanos'))
     },
     start() {
