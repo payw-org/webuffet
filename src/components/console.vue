@@ -23,7 +23,7 @@
             <span class="label">ID</span>
             {{ item.name.id }}
           </p>
-          <p v-if="item.name.cName">
+          <p v-if="!item.name.id && item.name.cName">
             <span class="label">Class</span>
             {{ item.name.cName }}
           </p>
@@ -166,7 +166,7 @@ export default {
   z-index: 2147483646;
   overflow-x: hidden;
   overflow-y: auto;
-  transition: opacity 400ms ease, transform 400ms ease;
+  transition: opacity 500ms ease, transform 500ms ease;
   opacity: 1;
   pointer-events: all;
   will-change: opacity, transform;
@@ -218,7 +218,7 @@ export default {
   }
 
   &.wb-console-hidden {
-    transform: scale(1.05);
+    transform: scale(1.2);
     opacity: 0;
     pointer-events: none;
   }
@@ -419,12 +419,16 @@ export default {
 
       .preview {
         width: 100%;
+        margin-bottom: 15px;
       }
 
       .information {
-        margin-top: 20px;
-        padding-top: 20px;
         border-top: 1px solid #e6e6e6;
+
+        p {
+          margin-top: 20px;
+          font-size: 20px;
+        }
       }
 
       .label {

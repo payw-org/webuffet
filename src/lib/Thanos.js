@@ -11,7 +11,6 @@ export default class Thanos {
     this.chance = new Chance()
 
     html2canvas(elm, {
-      allowTaint: true,
       useCORS: true,
       backgroundColor: null
     }).then(canvas => {
@@ -37,6 +36,8 @@ export default class Thanos {
       placeholder.style.zIndex = '2147483645'
       placeholder.style.top = elm.getBoundingClientRect().top + 'px'
       placeholder.style.left = elm.getBoundingClientRect().left + 'px'
+      placeholder.style.width = elm.getBoundingClientRect().width + 'px'
+      placeholder.style.height = elm.getBoundingClientRect().height + 'px'
 
       //create canvas for each imageData and append to target element
       for (let i = 0; i < this.canvasCount; i++) {
