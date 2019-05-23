@@ -17,15 +17,21 @@
         <div class="wb-cross cross-2"></div>
       </div>
       <div class="wb-item" v-for="(item, i) in modifiedItems" :key="i">
-        <!-- <p>id: {{ item.name.id }}</p>
-        <p>tName: {{ item.name.tName }}</p>
-        <p>tIndex: {{ item.name.tIndex }}</p>
-        <p>isDeleted: {{ item.style.isDeleted }}</p>
-        <p>translatex: {{ item.style.translatex }}</p>
-        <p>translatey: {{ item.style.translatey }}</p>
-        <p>rotate: {{ item.style.rotate }}</p>
-        <p>scale: {{ item.style.scale }}</p> -->
         <img class="preview" :src="item.imgSrc" alt="">
+        <div class="information">
+          <p v-if="item.name.id">
+            <span class="label">ID</span>
+            {{ item.name.id }}
+          </p>
+          <p v-if="item.name.cName">
+            <span class="label">Class</span>
+            {{ item.name.cName }}
+          </p>
+          <p v-if="!item.name.id && !item.name.cName">
+            <span class="label">Tag</span>
+            {{ item.name.tName }}
+          </p>
+        </div>
       </div>
     </div>
     <div class="centered">
@@ -413,6 +419,20 @@ export default {
 
       .preview {
         width: 100%;
+      }
+
+      .information {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e6e6e6;
+      }
+
+      .label {
+        background-color: #3fdeb9;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-right: 5px;
       }
     }
   }
