@@ -166,19 +166,18 @@ export default class WBApexTool {
       document.dispatchEvent(new CustomEvent('startselector'))
     }
     if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
-      if (e.shiftKey) { // redo
-        e.preventDefault()
-        if( this.wbSession.redoLength() <= 0 ) return;
-        this.wbSession.redo()
-        this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
-        this.setBoundingRectPos()
-      } else { // undo
-        e.preventDefault()
-        if( this.wbSession.length() <= 1 ) return;
-        this.wbSession.pop()
-        this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
-        this.setBoundingRectPos()
-      }
+      e.preventDefault()
+      if( this.wbSession.length() <= 1 ) return;
+      this.wbSession.pop()
+      this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
+      this.setBoundingRectPos()
+    }
+    if (e.key === 'y' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      if( this.wbSession.redoLength() <= 0 ) return;
+      this.wbSession.redo()
+      this.wbSession.getSelectedElement().style.transform = Ruler.generateCSS(this.wbSession.getFinalState().translate.x, this.wbSession.getFinalState().translate.y, this.wbSession.getFinalState().scale, this.wbSession.getFinalState().rotate)
+      this.setBoundingRectPos()
     }
   }
 
