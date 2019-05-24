@@ -1,7 +1,7 @@
 import WEBuffet from './WEBuffet'
 import { start } from 'repl';
 
-let timeout = 0
+// let timeout = 0
 let wb: WEBuffet|undefined = undefined
 
 require('./lib/jquery-ui.min.js')
@@ -34,21 +34,21 @@ chrome.runtime.onMessage.addListener(
       wb.start()
       
       // remove event for other operation because it remain until delete
-      window.removeEventListener('mousemove', clear)
-      window.removeEventListener('mouseup', clear)
+      // window.removeEventListener('mousemove', clear)
+      // window.removeEventListener('mouseup', clear)
     }
   })
 
-let clear = function () {
-  clearTimeout(timeout)
-}
+// let clear = function () {
+//   clearTimeout(timeout)
+// }
 
-// window.addEventListener('mousedown', wait)
-window.addEventListener('mousemove', clear)
-window.addEventListener('mouseup', clear)
+// // window.addEventListener('mousedown', wait)
+// window.addEventListener('mousemove', clear)
+// window.addEventListener('mouseup', clear)
 
-document.addEventListener('consolestop', e => {
-  // window.addEventListener('mousedown', wait)
-  window.addEventListener('mousemove', clear)
-  window.addEventListener('mouseup', clear)
-})
+// document.addEventListener('consolestop', e => {
+//   // window.addEventListener('mousedown', wait)
+//   window.addEventListener('mousemove', clear)
+//   window.addEventListener('mouseup', clear)
+// })

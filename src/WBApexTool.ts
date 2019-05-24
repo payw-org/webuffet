@@ -340,28 +340,17 @@ export default class WBApexTool {
   }
 
   private addImgSrc() {
+    let captures: Array<String> = []
     if(document.getElementById('webuffet-image-sources') != null) {
       let captures: Array<String> = JSON.parse(document.querySelector('#webuffet-image-sources').getAttribute('data'))
-      if(captures == null) {
-        captures = []
-        chrome.storage.sync.get(['myCustom'], item => {
-          captures.push(this.wbSession.getOriginalState().imgSrc)
-          document.body.removeChild(document.getElementById('webuffet-image-sources'))
-          let srcElm = document.createElement('div')
-          srcElm.id = 'webuffet-image-sources'
-          srcElm.setAttribute('data', JSON.stringify(captures))
-          document.body.appendChild(srcElm)
-        })
-      } else {
-        chrome.storage.sync.get(['myCustom'], item => {
-          captures.push(this.wbSession.getOriginalState().imgSrc)
-          document.body.removeChild(document.getElementById('webuffet-image-sources'))
-          let srcElm = document.createElement('div')
-          srcElm.id = 'webuffet-image-sources'
-          srcElm.setAttribute('data', JSON.stringify(captures))
-          document.body.appendChild(srcElm)
-        })
-      }
+      chrome.storage.sync.get(['myCustom'], item => {
+        captures.push(this.wbSession.getOriginalState().imgSrc)
+        document.body.removeChild(document.getElementById('webuffet-image-sources'))
+        let srcElm = document.createElement('div')
+        srcElm.id = 'webuffet-image-sources'
+        srcElm.setAttribute('data', JSON.stringify(captures))
+        document.body.appendChild(srcElm)
+      })
     } else {
       let captures: Array<string> = []
       captures[0] = this.wbSession.getOriginalState().imgSrc

@@ -43,7 +43,7 @@ window.onload = () => {
                     if (i > items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
-                    imgSrcArr.push(items.myCustom[i].name.id)
+                    imgSrcArr.push('null')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     processElement(items, i+1)
                     return
