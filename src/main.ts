@@ -34,7 +34,6 @@ chrome.runtime.onMessage.addListener(
       wb.start()
       
       // remove event for other operation because it remain until delete
-      // window.removeEventListener('mousedown', wait)
       window.removeEventListener('mousemove', clear)
       window.removeEventListener('mouseup', clear)
     }
