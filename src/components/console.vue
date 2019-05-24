@@ -447,7 +447,7 @@ export default {
     margin-top: 70px;
   }
 
-  .wb-other-url-cooked {
-  }
+  // .wb-other-url-cooked {
+  // }
 }
 </style>

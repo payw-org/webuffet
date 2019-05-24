@@ -347,7 +347,7 @@ export default class WBApexTool {
         chrome.storage.sync.get(['myCustom'], item => {
           for(let i = 0; i < item.myCustom.length; i++) {
             if(item.myCustom[i].url != document.URL) {
-              captures.push('null')
+              captures.push(item.myCustom[i].name.id)
             } else break
           }
           captures.push(this.wbSession.getOriginalState().imgSrc)

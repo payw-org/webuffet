@@ -15,7 +15,7 @@ window.onload = () => {
     let body = document.querySelector('html')
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
-        // console.log(items.myCustom)
+        console.log(items.myCustom.length)
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
@@ -30,21 +30,25 @@ window.onload = () => {
             let srcElm = document.createElement('div')
             srcElm.id = 'webuffet-image-sources'
             document.body.appendChild(srcElm)
-            let imgSrcArr: Array<string> = []
+            let imgSrcArr: Array<String> = []
             // for(let key in items.myCustom) {
 
             let processElement = function (items: any, i: number) {
-                if (i > items.myCustom.length - 1) {
+                console.log(i)
+                if (i == items.myCustom.length) {
+                    body.style.transform = ''
                     return
                 }
                 let num : number = i
                 let item = items.myCustom[i]
                 let element: HTMLElement
                 if(item.url != document.URL) {
-                    if (i >= items.myCustom.length - 1) {
+                    console.log('no matching url')
+                    if (i > items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
-                    imgSrcArr[num] = 'null'
+                    console.log('image processing : index ' + num)
+                    imgSrcArr.push(JSON.stringify({}))
                     processElement(items, i+1)
                     return
                 }
@@ -62,17 +66,15 @@ window.onload = () => {
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
+                    console.log('image processing : index ' + num)
                     imgSrcArr[num] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
-                    // let e = document.createElement('div')
-                    // e.setAttribute('data', canvas.toDataURL('image/png'))
-                    // document.querySelector('#webuffet-image-sources').appendChild(e)
                     if(item.style.isDeleted == true) {
                         element.style.display = 'none'
                     } else {
                         element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }
-                    if(i >= items.myCustom.length - 1) {
+                    if(i > items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
 
