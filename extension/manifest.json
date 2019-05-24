@@ -11,7 +11,8 @@
 		"declarativeContent",
 		"storage",
 		"identity",
-    	"identity.email"
+		"identity.email",
+		"contextMenus"
 	],
 	"background": {
 		"scripts": ["background.js"],

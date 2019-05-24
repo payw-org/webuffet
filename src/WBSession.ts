@@ -46,7 +46,6 @@ export default class WBSession {
     this.selectedElm = elm
     const rect = elm.getBoundingClientRect()
     html2canvas(this.selectedElm, {
-      //allowTaint: true,
       useCORS: true,
       backgroundColor: null,
     }).then((canvas: HTMLCanvasElement) => {

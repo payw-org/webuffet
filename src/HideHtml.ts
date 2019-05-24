@@ -15,7 +15,6 @@ window.onload = () => {
     let body = document.querySelector('html')
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
-        // console.log(items.myCustom)
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
@@ -30,21 +29,22 @@ window.onload = () => {
             let srcElm = document.createElement('div')
             srcElm.id = 'webuffet-image-sources'
             document.body.appendChild(srcElm)
-            let imgSrcArr: Array<string> = []
-            // for(let key in items.myCustom) {
+            let imgSrcArr: Array<String> = []
 
             let processElement = function (items: any, i: number) {
-                if (i > items.myCustom.length - 1) {
+                if (i == items.myCustom.length) {
+                    body.style.transform = ''
                     return
                 }
                 let num : number = i
                 let item = items.myCustom[i]
                 let element: HTMLElement
                 if(item.url != document.URL) {
-                    if (i >= items.myCustom.length - 1) {
+                    if (i > items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
-                    imgSrcArr[num] = 'null'
+                    imgSrcArr.push('null')
+                    srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     processElement(items, i+1)
                     return
                 }
@@ -64,15 +64,12 @@ window.onload = () => {
                   }).then((canvas: HTMLCanvasElement) => {
                     imgSrcArr[num] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
-                    // let e = document.createElement('div')
-                    // e.setAttribute('data', canvas.toDataURL('image/png'))
-                    // document.querySelector('#webuffet-image-sources').appendChild(e)
                     if(item.style.isDeleted == true) {
                         element.style.display = 'none'
                     } else {
                         element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }
-                    if(i >= items.myCustom.length - 1) {
+                    if(i > items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
 
@@ -81,10 +78,6 @@ window.onload = () => {
             }
 
             processElement(items, 0)
-
-            // for (let i = 0; i < items.myCustom.length; i++) {
-                
-            // }
         }
     })
 }
