@@ -345,11 +345,6 @@ export default class WBApexTool {
       if(captures == null) {
         captures = []
         chrome.storage.sync.get(['myCustom'], item => {
-          for(let i = 0; i < item.myCustom.length; i++) {
-            if(item.myCustom[i].url != document.URL) {
-              captures.push(item.myCustom[i].name.id)
-            } else break
-          }
           captures.push(this.wbSession.getOriginalState().imgSrc)
           document.body.removeChild(document.getElementById('webuffet-image-sources'))
           let srcElm = document.createElement('div')

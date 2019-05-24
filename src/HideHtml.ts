@@ -31,7 +31,6 @@ window.onload = () => {
             srcElm.id = 'webuffet-image-sources'
             document.body.appendChild(srcElm)
             let imgSrcArr: Array<String> = []
-            // for(let key in items.myCustom) {
 
             let processElement = function (items: any, i: number) {
                 console.log(i)
@@ -43,12 +42,11 @@ window.onload = () => {
                 let item = items.myCustom[i]
                 let element: HTMLElement
                 if(item.url != document.URL) {
-                    console.log('no matching url')
                     if (i > items.myCustom.length - 1) {
                         body.style.transform = ''
                     }
-                    console.log('image processing : index ' + num)
-                    imgSrcArr.push(JSON.stringify({}))
+                    imgSrcArr.push(items.myCustom[i].name.id)
+                    srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     processElement(items, i+1)
                     return
                 }
@@ -66,7 +64,6 @@ window.onload = () => {
                     useCORS: true,
                     backgroundColor: null,
                   }).then((canvas: HTMLCanvasElement) => {
-                    console.log('image processing : index ' + num)
                     imgSrcArr[num] = canvas.toDataURL('image/png')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
                     if(item.style.isDeleted == true) {
@@ -83,10 +80,6 @@ window.onload = () => {
             }
 
             processElement(items, 0)
-
-            // for (let i = 0; i < items.myCustom.length; i++) {
-                
-            // }
         }
     })
 }
