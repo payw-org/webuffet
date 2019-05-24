@@ -15,7 +15,6 @@ window.onload = () => {
     let body = document.querySelector('html')
     body.style.visibility = 'visible'
     chrome.storage.sync.get(['myCustom'], items => {
-        console.log(items.myCustom.length)
         /**
         * Here, Attach Style Sheet from object in items
         * Get URL first, check the URL matches with document.URL
@@ -33,7 +32,6 @@ window.onload = () => {
             let imgSrcArr: Array<String> = []
 
             let processElement = function (items: any, i: number) {
-                console.log(i)
                 if (i == items.myCustom.length) {
                     body.style.transform = ''
                     return
