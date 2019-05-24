@@ -23,9 +23,6 @@ require('./lib/jquery-ui.min.js')
 //   }, 700)
 // }
 
-window.addEventListener('startwb', function() {
-
-})
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
