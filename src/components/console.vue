@@ -140,6 +140,52 @@ export default {
         }
         // console.log(this.captureData)
       })
+    },
+    removeOneCooked(num) {
+      let element
+      if(this.modifiedItems[num].name.id != "") {
+        element = document.getElementById(this.modifiedItems[num].name.id)
+      } else if (this.modifiedItems[num].name.cName != "") {
+        element = document.getElementsByClassName(this.modifiedItems[num].name.cName).item(this.modifiedItems[num].name.cIndex)
+      } else {
+        element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex)
+      }
+      element.style.display = ''
+      element.style.transform = ''
+
+      chrome.storage.sync.get(['myCustom'], item => {
+        for (let i = 0; i < items.myCustom.length; i++) {
+          let newData = items.myCustom.filter(function() {
+            return element.name != items.myCustom[index].name
+          })
+          chrome.storage.sync.set({'myCustom': newData}, null)
+        }
+      })
+
+      this.modifiedItems.filter( () => {
+        return !element
+      })
+    },
+    removeAllCooked() {
+      for(let i = 0; i < this.modifiedItems.length; i++) {
+        let element
+        if(this.modifiedItems[i].name.id != "") {
+          element = document.getElementById(this.modifiedItems[num].name.id)
+        } else if (this.modifiedItems[num].name.cName != "") {
+          element = document.getElementsByClassName(this.modifiedItems[num].name.cName).item(this.modifiedItems[num].name.cIndex)
+        } else {
+          element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex)
+        }
+        element.style.display = ''
+        element.style.transform = ''
+      }
+
+      this.modifiedItems = []
+      chrome.sync.get(['myCustom'], items => {
+        let newData = items.myCustom.filter( function () {
+            return items.myCustom[index].url != document.URL
+          })
+      })
     }
   },
   created() {
