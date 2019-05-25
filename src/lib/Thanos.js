@@ -60,6 +60,9 @@ export default class Thanos {
         }, 70*i)
         $(dusts[i]).delay(70*i).fadeOut((110*i)+800,"easeInQuint",()=> {$(dusts[i]).remove();});
       }
+      setTimeout(() => {
+        document.body.removeChild(document.getElementsByClassName('thanos-area').item(0))
+      }, 70*dusts.length*3)
     });
   }
 
