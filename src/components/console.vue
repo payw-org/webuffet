@@ -184,8 +184,9 @@ export default {
       this.modifiedItems = []
       chrome.storage.sync.get(['myCustom'], items => {
         let newData = items.myCustom.filter(elements => elements.url != document.URL)
-        console.log(newData)
         chrome.storage.sync.set({'myCustom': newData})
+        document.body.removeChild(document.getElementById('webuffet-image-sources'))
+        document.dispatchEvent(new CustomEvent('needstoragesync'))
         this.show()
       })
     }
