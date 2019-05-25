@@ -150,7 +150,11 @@ export default {
       } else if (this.modifiedItems[num].name.cName != "") {
         element = document.getElementsByClassName(this.modifiedItems[num].name.cName).item(this.modifiedItems[num].name.cIndex)
       } else {
-        element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex)
+        if(this.modifiedItems[num].tName == 'DIV') {
+          element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length + 1)
+        } else {
+          element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length)
+        }
       }
       element.style.display = ''
       element.style.transform = ''
@@ -158,7 +162,9 @@ export default {
       chrome.storage.sync.get(['myCustom'], item => {
         let newData = items.myCustom.filter(elements => elements.name != element.name)
         chrome.storage.sync.set({'myCustom': newData}, null)
-        this.modifiedItems = this.modifiedItems.filter(items => items.name != element.name)
+        this.modifiedItems = this.modifiedItems.filter(elements => elements.name != element.name)
+        /* TODO: Need to add Image-Source-Control codes Here */
+        document.dispatchEvent(new CustomEvent('needstoragesync'))
         this.show()
       })
     },
