@@ -36,6 +36,7 @@
     </div>
     <div class="centered">
       <button style="margin-top: 100px;" @click="allowThanos"><span v-if = "!isThanos">Allow Thanos</span><span v-else>Thanos Activated</span></button>
+      <button style="margin-top: 100px;" @click="removeAllCooked">Remove All Cooked</button>
     </div>
     <!-- <h2 class="wb-setting-letter">Setting Time</h2>
     <div class="wb-for-up" @click="increaseTime">
@@ -142,6 +143,7 @@ export default {
       })
     },
     removeOneCooked(num) {
+      this.hide()
       let element
       if(this.modifiedItems[num].name.id != "") {
         element = document.getElementById(this.modifiedItems[num].name.id)
@@ -154,37 +156,37 @@ export default {
       element.style.transform = ''
 
       chrome.storage.sync.get(['myCustom'], item => {
-        for (let i = 0; i < items.myCustom.length; i++) {
-          let newData = items.myCustom.filter(function() {
-            return element.name != items.myCustom[index].name
-          })
-          chrome.storage.sync.set({'myCustom': newData}, null)
-        }
-      })
-
-      this.modifiedItems.filter( () => {
-        return !element
+        let newData = items.myCustom.filter(elements => elements.name != element.name)
+        chrome.storage.sync.set({'myCustom': newData}, null)
+        this.modifiedItems = this.modifiedItems.filter(items => items.name != element.name)
+        this.show()
       })
     },
     removeAllCooked() {
+      this.hide()
       for(let i = 0; i < this.modifiedItems.length; i++) {
         let element
         if(this.modifiedItems[i].name.id != "") {
-          element = document.getElementById(this.modifiedItems[num].name.id)
-        } else if (this.modifiedItems[num].name.cName != "") {
-          element = document.getElementsByClassName(this.modifiedItems[num].name.cName).item(this.modifiedItems[num].name.cIndex)
+          element = document.getElementById(this.modifiedItems[i].name.id)
+        } else if (this.modifiedItems[i].name.cName != "") {
+          element = document.getElementsByClassName(this.modifiedItems[i].name.cName).item(this.modifiedItems[i].name.cIndex)
         } else {
-          element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex)
+          if(this.modifiedItems[i].name.tName == 'DIV') {
+            element = document.getElementsByTagName(this.modifiedItems[i].name.tName).item(this.modifiedItems[i].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length + 1)
+          } else {
+            element = document.getElementsByTagName(this.modifiedItems[i].name.tName).item(this.modifiedItems[i].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length)
+          }
         }
         element.style.display = ''
         element.style.transform = ''
       }
 
       this.modifiedItems = []
-      chrome.sync.get(['myCustom'], items => {
-        let newData = items.myCustom.filter( function () {
-            return items.myCustom[index].url != document.URL
-          })
+      chrome.storage.sync.get(['myCustom'], items => {
+        let newData = items.myCustom.filter(elements => elements.url != document.URL)
+        console.log(newData)
+        chrome.storage.sync.set({'myCustom': newData})
+        this.show()
       })
     }
   },
