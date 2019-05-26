@@ -35,7 +35,6 @@ export default class WBApexTool {
   constructor(apexToolElm: HTMLElement, wbSession: WBSession) {
     this.apexToolElm = apexToolElm
     this.wbSession = wbSession
-    this.strElem = []
 
     // Create event collector instance
     this.eventCollector = new EventCollector()
@@ -46,19 +45,11 @@ export default class WBApexTool {
     this.scaleBtn = this.apexToolElm.querySelector('.scale')
     this.moreBtn = this.apexToolElm.querySelector('.more')
 
-    // Save changes done before
-    chrome.storage.sync.get(['myCustom'], items  => {
-      if(items.myCustom[0] === {}) {
-        
-      } else {
-        for(let key in items.myCustom) {
-          this.strElem.push(items.myCustom[key])
-        }
-      }
-    })
+    this.syncStorage()
 
     // Add apex tool triggering event listener
     document.addEventListener('webuffetscan', this.start.bind(this))
+    document.addEventListener('needstoragesync', this.syncStorage.bind(this))
   }
 
   // fires when mouse down
@@ -359,5 +350,18 @@ export default class WBApexTool {
       srcElm.setAttribute('data', JSON.stringify(captures))
       document.body.appendChild(srcElm)
     }
+  }
+
+  private syncStorage() {
+    this.strElem = []
+    chrome.storage.sync.get(['myCustom'], items  => {
+      if(items.myCustom[0] === {}) {
+        
+      } else {
+        for(let key in items.myCustom) {
+          this.strElem.push(items.myCustom[key])
+        }
+      }
+    })
   }
 }

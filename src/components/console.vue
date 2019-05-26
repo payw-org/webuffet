@@ -36,6 +36,7 @@
     </div>
     <div class="centered">
       <button style="margin-top: 100px;" @click="allowThanos"><span v-if = "!isThanos">Allow Thanos</span><span v-else>Thanos Activated</span></button>
+      <button style="margin-top: 100px;" @click="removeAllCooked">Remove All Cooked</button>
     </div>
     <!-- <h2 class="wb-setting-letter">Setting Time</h2>
     <div class="wb-for-up" @click="increaseTime">
@@ -139,6 +140,60 @@ export default {
           this.modifiedItems.push(temp[i])
         }
         // console.log(this.captureData)
+      })
+    },
+    removeOneCooked(num) {
+      this.hide()
+      let element
+      if(this.modifiedItems[num].name.id != "") {
+        element = document.getElementById(this.modifiedItems[num].name.id)
+      } else if (this.modifiedItems[num].name.cName != "") {
+        element = document.getElementsByClassName(this.modifiedItems[num].name.cName).item(this.modifiedItems[num].name.cIndex)
+      } else {
+        if(this.modifiedItems[num].tName == 'DIV') {
+          element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length + 1)
+        } else {
+          element = document.getElementsByTagName(this.modifiedItems[num].name.tName).item(this.modifiedItems[num].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length)
+        }
+      }
+      element.style.display = ''
+      element.style.transform = ''
+
+      chrome.storage.sync.get(['myCustom'], item => {
+        let newData = items.myCustom.filter(elements => elements.name != element.name)
+        chrome.storage.sync.set({'myCustom': newData}, null)
+        this.modifiedItems = this.modifiedItems.filter(elements => elements.name != element.name)
+        /* TODO: Need to add Image-Source-Control codes Here */
+        document.dispatchEvent(new CustomEvent('needstoragesync'))
+        this.show()
+      })
+    },
+    removeAllCooked() {
+      this.hide()
+      for(let i = 0; i < this.modifiedItems.length; i++) {
+        let element
+        if(this.modifiedItems[i].name.id != "") {
+          element = document.getElementById(this.modifiedItems[i].name.id)
+        } else if (this.modifiedItems[i].name.cName != "") {
+          element = document.getElementsByClassName(this.modifiedItems[i].name.cName).item(this.modifiedItems[i].name.cIndex)
+        } else {
+          if(this.modifiedItems[i].name.tName == 'DIV') {
+            element = document.getElementsByTagName(this.modifiedItems[i].name.tName).item(this.modifiedItems[i].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length + 1)
+          } else {
+            element = document.getElementsByTagName(this.modifiedItems[i].name.tName).item(this.modifiedItems[i].name.tIndex + document.querySelector('#webuffet-components').querySelectorAll(this.modifiedItems[i].name.tName).length)
+          }
+        }
+        element.style.display = ''
+        element.style.transform = ''
+      }
+
+      this.modifiedItems = []
+      chrome.storage.sync.get(['myCustom'], items => {
+        let newData = items.myCustom.filter(elements => elements.url != document.URL)
+        chrome.storage.sync.set({'myCustom': newData})
+        document.body.removeChild(document.getElementById('webuffet-image-sources'))
+        document.dispatchEvent(new CustomEvent('needstoragesync'))
+        this.show()
       })
     }
   },
