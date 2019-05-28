@@ -48,7 +48,7 @@ export default class WBApexTool {
     this.syncStorage()
 
     // Add apex tool triggering event listener
-    document.addEventListener('webuffetscan', this.start.bind(this))
+    document.addEventListener('webuffetscanend', this.start.bind(this))
     document.addEventListener('needstoragesync', this.syncStorage.bind(this))
   }
 
