@@ -43,6 +43,9 @@ export default class WBSession {
   }
 
   setOriginal(elm: HTMLElement) {
+    if (window.getComputedStyle(elm).display === 'inline') {
+      elm.style.display = 'inline-block'
+    }
     this.selectedElm = elm
     const rect = elm.getBoundingClientRect()
     html2canvas(this.selectedElm, {
