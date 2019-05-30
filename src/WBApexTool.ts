@@ -257,11 +257,10 @@ export default class WBApexTool {
 
     if(this.wbSession.getSelectedElement().tagName == 'DIV') {
       tempIndex = Array.from(document.getElementsByTagName('DIV')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length - 1
-    } else if (this.wbSession.getSelectedElement().tagName == 'SPAN') {
-      tempIndex = Array.from(document.getElementsByTagName('SPAN')).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
     } else {
-      tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement())
+      tempIndex = Array.from(document.getElementsByTagName(this.wbSession.getSelectedElement().tagName)).indexOf(this.wbSession.getSelectedElement()) - document.querySelector('#webuffet-components').querySelectorAll(this.wbSession.getSelectedElement().tagName).length
     }
+
     if(this.wbSession.getSelectedElement().className.includes(' ') == true) {
       tempCName = ""
     } else {
