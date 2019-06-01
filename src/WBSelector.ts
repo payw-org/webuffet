@@ -37,7 +37,7 @@ export default class WBSelector {
       this.stop()
       this.wbSession.setOriginal(this.hoverElm)
 
-      document.dispatchEvent(new CustomEvent('webuffetscan'))
+      document.dispatchEvent(new CustomEvent('webuffetscanend'))
     })
   }
 
