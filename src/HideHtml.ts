@@ -2,9 +2,7 @@ import Ruler from "./Ruler"
 import html2canvas from 'html2canvas'
 
 let body = document.querySelector('html')
-body.style.visibility = 'hidden'
-// body.style.overflow = 'hidden'
-body.style.transform = 'translateX(-400%)'
+body.style.opacity = '0'
 body.getBoundingClientRect().height
 
 /**
@@ -13,7 +11,7 @@ body.getBoundingClientRect().height
  */
 window.onload = () => {
     let body = document.querySelector('html')
-    body.style.visibility = 'visible'
+
     chrome.storage.sync.get(['myCustom'], items => {
         /**
         * Here, Attach Style Sheet from object in items
@@ -21,7 +19,7 @@ window.onload = () => {
         * If matches, find elements in document with name and generate CSS for that element with style
         */
         if(!items.myCustom[0]) {
-            body.style.transform = ''
+            body.style.opacity = '1'
             return
         }
         
@@ -33,7 +31,8 @@ window.onload = () => {
 
             let processElement = function (items: any, i: number) {
                 if (i == items.myCustom.length) {
-                    body.style.transform = ''
+                    // body.style.transform = ''
+                    body.style.opacity = '1'
                     return
                 }
                 let num : number = i
@@ -41,7 +40,7 @@ window.onload = () => {
                 let element: HTMLElement
                 if(item.url != document.URL) {
                     if (i > items.myCustom.length - 1) {
-                        body.style.transform = ''
+                        body.style.opacity = '1'
                     }
                     imgSrcArr.push('null')
                     srcElm.setAttribute('data', JSON.stringify(imgSrcArr))
@@ -70,7 +69,7 @@ window.onload = () => {
                         element.style.transform = Ruler.generateCSS(item.style.translatex, item.style.translatey, item.style.scale, item.style.rotate)
                     }
                     if(i > items.myCustom.length - 1) {
-                        body.style.transform = ''
+                        body.style.opacity = '1'
                     }
 
                     processElement(items, i + 1)

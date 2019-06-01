@@ -218,27 +218,29 @@ export default class WBApexTool {
 
     // Set ApexTool's boundary position
     let scaledAmount = 1
+    let rotateAmount = 0
     let loopParent = selectedElm
     while (loopParent.parentElement !== null) {
       scaledAmount *= Ruler.getScaleXY(loopParent).x
+      rotateAmount += Ruler.getRotationValue(loopParent)
       loopParent = loopParent.parentElement
     }
     this.apexToolElm.style.left = rect.left + (rect.width - selectedElm.clientWidth) / 2 - (selectedElm.clientWidth * scaledAmount - selectedElm.clientWidth) / 2 + 'px'
     this.apexToolElm.style.top = rect.top + (rect.height - selectedElm.clientHeight) / 2 - (selectedElm.clientHeight * scaledAmount - selectedElm.clientHeight) / 2 + 'px'
     this.apexToolElm.style.width = selectedElm.clientWidth * scaledAmount  + 'px'
     this.apexToolElm.style.height = selectedElm.clientHeight * scaledAmount + 'px'
-    this.apexToolElm.style.transform = 'rotate(' + Ruler.getRotationValue(selectedElm) + 'deg)'
+    this.apexToolElm.style.transform = 'rotate(' + rotateAmount + 'deg)'
 
     // Preserve buttons' horizontality
     // by rotating to oposite degrees
-    this.removeBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.removeBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.rotateBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.rotateBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.removeBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.removeBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.moreBtn.style.transform = 'rotate(' + -(finalState.rotate) + 'deg)'
-    this.moreBtn.style.webkitTransform = 'rotate(' + -(finalState.rotate) + 'deg)'
+    this.removeBtn.style.transform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.removeBtn.style.webkitTransform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.rotateBtn.style.transform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.rotateBtn.style.webkitTransform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.removeBtn.style.transform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.removeBtn.style.webkitTransform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.moreBtn.style.transform = 'rotate(' + -(rotateAmount) + 'deg)'
+    this.moreBtn.style.webkitTransform = 'rotate(' + -(rotateAmount) + 'deg)'
   }
 
   // removes the selected element
