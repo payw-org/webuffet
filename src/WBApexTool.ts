@@ -217,10 +217,16 @@ export default class WBApexTool {
     const finalState = this.wbSession.getFinalState()
 
     // Set ApexTool's boundary position
-    this.apexToolElm.style.left = rect.left + (rect.width - selectedElm.clientWidth) / 2 - (selectedElm.clientWidth * finalState.scale - selectedElm.clientWidth) / 2 + 'px'
-    this.apexToolElm.style.top = rect.top + (rect.height - selectedElm.clientHeight) / 2 - (selectedElm.clientHeight * finalState.scale - selectedElm.clientHeight) / 2 + 'px'
-    this.apexToolElm.style.width = selectedElm.clientWidth * finalState.scale  + 'px'
-    this.apexToolElm.style.height = selectedElm.clientHeight * finalState.scale + 'px'
+    let scaledAmount = 1
+    let loopParent = selectedElm
+    while (loopParent.parentElement !== null) {
+      scaledAmount *= Ruler.getScaleXY(loopParent).x
+      loopParent = loopParent.parentElement
+    }
+    this.apexToolElm.style.left = rect.left + (rect.width - selectedElm.clientWidth) / 2 - (selectedElm.clientWidth * scaledAmount - selectedElm.clientWidth) / 2 + 'px'
+    this.apexToolElm.style.top = rect.top + (rect.height - selectedElm.clientHeight) / 2 - (selectedElm.clientHeight * scaledAmount - selectedElm.clientHeight) / 2 + 'px'
+    this.apexToolElm.style.width = selectedElm.clientWidth * scaledAmount  + 'px'
+    this.apexToolElm.style.height = selectedElm.clientHeight * scaledAmount + 'px'
     this.apexToolElm.style.transform = 'rotate(' + Ruler.getRotationValue(selectedElm) + 'deg)'
 
     // Preserve buttons' horizontality
