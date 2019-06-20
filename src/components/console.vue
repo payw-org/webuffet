@@ -38,13 +38,13 @@
       <button style="margin-top: 100px;" @click="allowThanos"><span v-if = "!isThanos">Allow Thanos</span><span v-else>Thanos Activated</span></button>
       <button style="margin-top: 100px;" @click="removeAllCooked">Remove All Cooked</button>
     </div>
-    <!-- <h2 class="wb-setting-letter">Setting Time</h2>
+    <h2 class="wb-setting-letter">Setting Time</h2>
     <div class="wb-for-up" @click="increaseTime">
      <div class="wb-arrow up"></div>
     </div>
     <div class="wb-for-down" @click="decreaseTime">
        <div class="wb-arrow down"></div>
-    </div> -->
+    </div> 
     <!-- <div class="centered">
       <h2 class="other-pages-title">Cooked On Other Pages</h2>
     </div>
