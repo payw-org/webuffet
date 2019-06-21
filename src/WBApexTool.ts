@@ -50,6 +50,7 @@ export default class WBApexTool {
     // Add apex tool triggering event listener
     document.addEventListener('webuffetscanend', this.start.bind(this))
     document.addEventListener('needstoragesync', this.syncStorage.bind(this))
+    document.addEventListener('consolestart', this.stop.bind(this))
   }
 
   // fires when mouse down
