@@ -31,6 +31,7 @@ chrome.runtime.onMessage.addListener(
         wb = new WEBuffet()
       }
       
+      document.dispatchEvent(new CustomEvent('consolestart'))
       wb.start()
       
       // remove event for other operation because it remain until delete

@@ -39,6 +39,7 @@ export default class WBSelector {
 
       document.dispatchEvent(new CustomEvent('webuffetscanend'))
     })
+    this.eventCollector.attachEvent(document, 'consolestart', this.stop.bind(this))
   }
 
   private onMouseMove(e: MouseEvent) {
