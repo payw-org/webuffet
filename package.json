@@ -2,7 +2,7 @@
   "name": "webuffet",
   "version": "1.0.0",
   "description": "Manipulate any website to your tastes.",
-  "repository": "https://github.com/CAU-OSS-2019/team-project-team9.git",
+  "repository": "https://github.com/payw-org/webuffet.git",
   "main": "main.js",
   "scripts": {
     "build": "npx webpack --config webpack.config.js",
